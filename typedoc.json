@@ -1,6 +1,6 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["./pages"],
+  "entryPoints": ["./pages", "./components"],
   "entryPointStrategy": "Expand",
   "out": "./docs",
   "mergeModulesRenameDefaults": true,

@@ -1,7 +1,7 @@
 import NavbarLinks from "./Links";
 
 /**
- * Container component to render navigation links.
+ * Container component to render the navigation bar.
  */
 function NavbarContainer() {
   return (
