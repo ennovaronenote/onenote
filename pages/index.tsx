@@ -6,7 +6,7 @@ import { NextPage } from "next";
  */
 const Home: NextPage = () => {
   return (
-    <div className="container">
+    <div className="container mx-auto">
       <h1 className="text-center">Home Page</h1>
     </div>
   );
