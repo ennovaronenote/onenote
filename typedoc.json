@@ -1,0 +1,9 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./pages"],
+  "entryPointStrategy": "Expand",
+  "out": "./docs",
+  "mergeModulesRenameDefaults": true,
+  "mergeModulesMergeMode": "project",
+  "categorizeByGroup": true
+}

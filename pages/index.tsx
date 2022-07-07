@@ -1,5 +1,9 @@
 import { NextPage } from "next";
 
+/**
+ * Page to render the home / landing page.
+ * @group Pages
+ */
 const Home: NextPage = () => {
   return (
     <div>
