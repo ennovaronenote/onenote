@@ -1,3 +1,0 @@
-class AuthenticationClient {}
-
-export { AuthenticationClient };
