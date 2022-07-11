@@ -8,28 +8,76 @@
 
 - [constructor](GraphRequest.md#constructor)
 
+### Properties
+
+- [#token](GraphRequest.md##token)
+- [config](GraphRequest.md#config)
+
 ### Methods
 
-- [authenticate](GraphRequest.md#authenticate)
+- [executeRequest](GraphRequest.md#executerequest)
+- [init](GraphRequest.md#init)
 
 ## Constructors
 
 ### constructor
 
-• **new GraphRequest**(`config`)
+• `Private` **new GraphRequest**(`config`, `token`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `config` | [`IClientOptions`](../interfaces/IClientOptions.md) |
+| `token` | `CookieValueTypes` |
+
+## Properties
+
+### #token
+
+• `Private` **#token**: `CookieValueTypes`
+
+#### Defined in
+
+[lib/GraphRequest.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/e79470b/lib/GraphRequest.ts#L11)
+
+___
+
+### config
+
+• **config**: [`IClientOptions`](../interfaces/IClientOptions.md)
+
+#### Defined in
+
+[lib/GraphRequest.ts:12](https://gitlab.com/ennovar1/OneNote/-/blob/e79470b/lib/GraphRequest.ts#L12)
 
 ## Methods
 
-### authenticate
+### executeRequest
 
-▸ `Private` **authenticate**(): `Promise`<`void`\>
+▸ **executeRequest**(): `void`
 
 #### Returns
 
-`Promise`<`void`\>
+`void`
+
+___
+
+### init
+
+▸ `Static` **init**(`config`, `context`): `Promise`<[`GraphRequest`](GraphRequest.md)\>
+
+Initializer function to easily ensure that access tokens are read before completing a request.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | [`IClientOptions`](../interfaces/IClientOptions.md) |
+| `context` | `NextPageContext` |
+
+#### Returns
+
+`Promise`<[`GraphRequest`](GraphRequest.md)\>
+
+A class, GraphRequest, which holds the methods to make API requests.

@@ -1,4 +1,5 @@
-import { NextPage } from "next";
+import { setCookie } from "cookies-next";
+import { NextPage, NextPageContext } from "next";
 import { AuthenticationClient } from "../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../lib/Constants";
 
@@ -14,8 +15,13 @@ const Home: NextPage = () => {
   );
 };
 
-const client = AuthenticationClient.init(AUTH_CONFIG);
-const request = client.api();
-request.executeRequest();
+export async function getServerSideProps(context: NextPageContext) {
+  const client = AuthenticationClient.init(AUTH_CONFIG);
+  if (!context.req) return;
+  const request = await client.api(context);
+
+  request.executeRequest();
+  return { props: {} };
+}
 
 export default Home;

@@ -1,3 +1,4 @@
+import { NextPageContext } from "next";
 import { GraphRequest } from "./GraphRequest";
 import { IClientOptions } from "./IClientOptions";
 
@@ -24,8 +25,8 @@ class AuthenticationClient {
     return new AuthenticationClient(options);
   }
 
-  public api() {
-    return new GraphRequest(this.config);
+  public async api(context: NextPageContext) {
+    return await GraphRequest.init(this.config, context);
   }
 }
 

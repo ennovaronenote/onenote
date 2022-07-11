@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[lib/IClientOptions.ts:2](https://gitlab.com/ennovar1/OneNote/-/blob/8f8cadb/lib/IClientOptions.ts#L2)
+[lib/IClientOptions.ts:2](https://gitlab.com/ennovar1/OneNote/-/blob/e79470b/lib/IClientOptions.ts#L2)
