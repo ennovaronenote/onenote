@@ -8,6 +8,7 @@ export type LinkProps = {
 /**
  * Utilizes LinkProps type to render a valid navigation link.
  * @param props
+ * @group Components
  */
 function NavbarLink(props: LinkProps) {
   return (

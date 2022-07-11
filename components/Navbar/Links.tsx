@@ -2,6 +2,7 @@ import NavbarLink from "./Link";
 
 /**
  * A container to hold necessary links for navigation.
+ * @group Components
  */
 function NavbarLinks() {
   return (

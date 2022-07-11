@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[lib/GraphRequest.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/e79470b/lib/GraphRequest.ts#L11)
+[lib/GraphRequest.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/b6e67c0/lib/GraphRequest.ts#L11)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[lib/GraphRequest.ts:12](https://gitlab.com/ennovar1/OneNote/-/blob/e79470b/lib/GraphRequest.ts#L12)
+[lib/GraphRequest.ts:12](https://gitlab.com/ennovar1/OneNote/-/blob/b6e67c0/lib/GraphRequest.ts#L12)
 
 ## Methods
 
