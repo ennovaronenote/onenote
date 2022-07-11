@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import { AuthenticationClient } from "../lib/AuthenticationClient";
-import { GRAPH_BASE_URL } from "../lib/Constants";
-import { IClientOptions } from "../lib/IClientOptions";
+import { AUTH_CONFIG } from "../lib/Constants";
 
 /**
  * Page to render the home / landing page.
@@ -15,10 +14,7 @@ const Home: NextPage = () => {
   );
 };
 
-const authOptions: IClientOptions = {
-  baseUrl: GRAPH_BASE_URL,
-};
-
-const client = AuthenticationClient.init(authOptions);
+const client = AuthenticationClient.init(AUTH_CONFIG);
+client.api();
 
 export default Home;

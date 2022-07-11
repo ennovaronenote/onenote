@@ -7,6 +7,7 @@
 ### Classes
 
 - [AuthenticationClient](classes/AuthenticationClient.md)
+- [GraphRequest](classes/GraphRequest.md)
 
 ### Interfaces
 
@@ -18,6 +19,7 @@
 
 ### Variables
 
+- [AUTH\_CONFIG](modules.md#auth_config)
 - [GRAPH\_API\_VERSION](modules.md#graph_api_version)
 - [GRAPH\_BASE\_URL](modules.md#graph_base_url)
 
@@ -25,7 +27,11 @@
 
 - [Home](modules.md#home)
 
-### Functions
+### API Pages Functions
+
+- [ApiAuthorize](modules.md#apiauthorize)
+
+### Other Functions
 
 - [NavbarContainer](modules.md#navbarcontainer)
 - [NavbarLink](modules.md#navbarlink)
@@ -46,9 +52,23 @@
 
 #### Defined in
 
-[components/Navbar/Link.tsx:3](https://gitlab.com/ennovar1/OneNote/-/blob/eaf20ab/components/Navbar/Link.tsx#L3)
+[components/Navbar/Link.tsx:3](https://gitlab.com/ennovar1/OneNote/-/blob/dc527ef/components/Navbar/Link.tsx#L3)
 
 ## Variables
+
+### AUTH\_CONFIG
+
+• `Const` **AUTH\_CONFIG**: [`IClientOptions`](interfaces/IClientOptions.md)
+
+**`Constant`**
+
+Default options to provide to [AuthenticationClient](classes/AuthenticationClient.md)
+
+#### Defined in
+
+[lib/Constants.ts:23](https://gitlab.com/ennovar1/OneNote/-/blob/dc527ef/lib/Constants.ts#L23)
+
+___
 
 ### GRAPH\_API\_VERSION
 
@@ -60,7 +80,7 @@ Default API Endpoint version.
 
 #### Defined in
 
-lib/Constants.ts:9
+[lib/Constants.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/dc527ef/lib/Constants.ts#L11)
 
 ___
 
@@ -74,7 +94,7 @@ Default URL for Graph requests.
 
 #### Defined in
 
-lib/Constants.ts:15
+[lib/Constants.ts:17](https://gitlab.com/ennovar1/OneNote/-/blob/dc527ef/lib/Constants.ts#L17)
 
 ## Pages
 
@@ -86,9 +106,28 @@ Page to render the home / landing page.
 
 #### Defined in
 
-[pages/index.tsx:10](https://gitlab.com/ennovar1/OneNote/-/blob/eaf20ab/pages/index.tsx#L10)
+[pages/index.tsx:9](https://gitlab.com/ennovar1/OneNote/-/blob/dc527ef/pages/index.tsx#L9)
 
-## Functions
+## API Pages Functions
+
+### ApiAuthorize
+
+▸ **ApiAuthorize**(`req`, `res`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `req` | `NextApiRequest` |
+| `res` | `NextApiResponse`<`any`\> |
+
+#### Returns
+
+`Promise`<`void`\>
+
+___
+
+## Other Functions
 
 ### NavbarContainer
 

@@ -11,10 +11,10 @@
 ### Properties
 
 - [config](AuthenticationClient.md#config)
-- [urlComponents](AuthenticationClient.md#urlcomponents)
 
 ### Methods
 
+- [api](AuthenticationClient.md#api)
 - [init](AuthenticationClient.md#init)
 
 ## Constructors
@@ -39,21 +39,19 @@ Configuration to initialize the client with
 
 #### Defined in
 
-lib/AuthenticationClient.ts:8
-
-___
-
-### urlComponents
-
-• `Private` **urlComponents**: `string`[]
-
-Variable to hold different components of the URL
-
-#### Defined in
-
-lib/AuthenticationClient.ts:5
+[lib/AuthenticationClient.ts:6](https://gitlab.com/ennovar1/OneNote/-/blob/dc527ef/lib/AuthenticationClient.ts#L6)
 
 ## Methods
+
+### api
+
+▸ **api**(): [`GraphRequest`](GraphRequest.md)
+
+#### Returns
+
+[`GraphRequest`](GraphRequest.md)
+
+___
 
 ### init
 
