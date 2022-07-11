@@ -15,6 +15,7 @@ const Home: NextPage = () => {
 };
 
 const client = AuthenticationClient.init(AUTH_CONFIG);
-client.api();
+const request = client.api();
+request.executeRequest();
 
 export default Home;
