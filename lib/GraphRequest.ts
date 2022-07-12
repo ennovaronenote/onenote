@@ -30,8 +30,10 @@ class GraphRequest {
     context: NextPageContext
   ): Promise<GraphRequest> {
     try {
-      const cookieOptions = { req: context.req, res: context.res };
+      const { req, res } = context;
+      const cookieOptions = { req, res };
       const tokenExists = hasCookie("token", cookieOptions);
+
       if (tokenExists)
         return new GraphRequest(config, getCookie("token", cookieOptions));
 
@@ -45,16 +47,27 @@ class GraphRequest {
           grant_type: "client_credentials",
         }),
       };
+
+      // Retrieve access_token from OAuth Authorization Flow
       const graphRequest = await fetch(
         "https://login.microsoftonline.com/9763eb70-4bf9-4403-84be-2bd40118e7f2/oauth2/v2.0/token",
         graphRequestOptions
       );
       const graphResponse = await graphRequest.json();
 
+      // Easier way to store errors / access token
+      const accessToken = graphResponse["access_token"];
+      const error = graphResponse["error"];
+
       // If there was a valid access token response, send it to an HttpOnly cookie and return the instance
-      if (graphResponse["access_token"]) {
-        setCookie("token", graphResponse["access_token"], cookieOptions);
-        return new GraphRequest(config, graphResponse["access_token"]);
+      if (accessToken) {
+        setCookie("token", accessToken, cookieOptions);
+        return new GraphRequest(config, accessToken);
+      }
+
+      if (error) {
+        console.error(`Error with access token: ${error}`);
+        return new GraphRequest(config, "");
       }
 
       return new GraphRequest(config, "");

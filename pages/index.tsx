@@ -17,7 +17,6 @@ const Home: NextPage = () => {
 
 export async function getServerSideProps(context: NextPageContext) {
   const client = AuthenticationClient.init(AUTH_CONFIG);
-  if (!context.req) return;
   const request = await client.api(context);
 
   request.executeRequest();
