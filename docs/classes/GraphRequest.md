@@ -43,7 +43,7 @@ Complete URL to submit API requests
 
 #### Defined in
 
-[lib/GraphRequest.ts:15](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/GraphRequest.ts#L15)
+[lib/GraphRequest.ts:15](https://gitlab.com/ennovar1/OneNote/-/blob/ad85137/lib/GraphRequest.ts#L15)
 
 ___
 
@@ -55,7 +55,7 @@ Access token to send with headers
 
 #### Defined in
 
-[lib/GraphRequest.ts:12](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/GraphRequest.ts#L12)
+[lib/GraphRequest.ts:12](https://gitlab.com/ennovar1/OneNote/-/blob/ad85137/lib/GraphRequest.ts#L12)
 
 ___
 
@@ -67,7 +67,7 @@ Configuration options so the request knows the URL, type of request, etc...
 
 #### Defined in
 
-[lib/GraphRequest.ts:18](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/GraphRequest.ts#L18)
+[lib/GraphRequest.ts:18](https://gitlab.com/ennovar1/OneNote/-/blob/ad85137/lib/GraphRequest.ts#L18)
 
 ## Methods
 
