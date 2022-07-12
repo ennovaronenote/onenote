@@ -10,4 +10,4 @@ type ErrorType<T> = {
   innerError?: InnerErrorType;
 };
 
-export type { ErrorType };
+export type { ErrorType, InnerErrorType };

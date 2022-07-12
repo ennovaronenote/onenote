@@ -1,6 +1,10 @@
 import NotebookCell from "./Cell";
 import NotebookHeader from "./Header";
 
+/**
+ * @group Components
+ * @returns
+ */
 function NotebookList({ notebooks }: any) {
   if (!notebooks) return <></>;
 

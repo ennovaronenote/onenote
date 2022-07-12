@@ -4,6 +4,11 @@ import NotebookList from "../components/Notebook/List";
 import { AuthenticationClient } from "../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../lib/Constants";
 
+/**
+ * Page to render list of notebooks
+ * @group Pages
+ * @returns
+ */
 function ViewNotebooks(props: any) {
   if (props.error) return <ErrorMessage error={props.error} />;
   if (!props.notebooks)
@@ -17,6 +22,7 @@ function ViewNotebooks(props: any) {
   );
 }
 
+/** @ignore */
 export async function getServerSideProps(context: NextPageContext) {
   const client = AuthenticationClient.init({
     ...AUTH_CONFIG,

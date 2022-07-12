@@ -9,6 +9,7 @@ function NavbarLinks() {
     <div className="container mx-auto flex flex-row justify-end">
       <NavbarLink href="/" value="Home" />
       <NavbarLink href="/view-notebooks" value="View Notebooks" />
+      <NavbarLink href="/view-sections" value="View Sections" />
       <NavbarLink href="/" value="Login" />
     </div>
   );

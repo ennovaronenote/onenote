@@ -39,7 +39,7 @@ Configuration to initialize the client with
 
 #### Defined in
 
-[lib/AuthenticationClient.ts:7](https://gitlab.com/ennovar1/OneNote/-/blob/d999c8c/lib/AuthenticationClient.ts#L7)
+[lib/AuthenticationClient.ts:7](https://gitlab.com/ennovar1/OneNote/-/blob/3185caa/lib/AuthenticationClient.ts#L7)
 
 ## Methods
 

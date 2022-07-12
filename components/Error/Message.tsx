@@ -1,5 +1,9 @@
 import { ErrorType } from "./Type";
 
+/**
+ * @group Components
+ * @returns
+ */
 function ErrorMessage({ error }: { error: ErrorType<any> }) {
   if (!error) return <></>;
 
@@ -8,14 +12,13 @@ function ErrorMessage({ error }: { error: ErrorType<any> }) {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-center">
+      <h1 className="text-center text-red-500 text-xl py-3">
         An error has occurred! See more details below.
       </h1>
 
       <div className="container">
-        {error.message && errorMessage}
-
         {error.code && errorCode}
+        {error.message && errorMessage}
       </div>
     </div>
   );

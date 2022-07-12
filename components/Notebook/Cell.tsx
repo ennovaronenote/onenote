@@ -1,5 +1,11 @@
 import Link from "next/link";
 
+/**
+ * @group Components
+ * @param content
+ * @param contentType
+ * @returns
+ */
 function NotebookCell({
   content,
   contentType,
