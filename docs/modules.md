@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[components/Navbar/Link.tsx:3](https://gitlab.com/ennovar1/OneNote/-/blob/9ecd859/components/Navbar/Link.tsx#L3)
+[components/Navbar/Link.tsx:3](https://gitlab.com/ennovar1/OneNote/-/blob/d999c8c/components/Navbar/Link.tsx#L3)
 
 ## Variables
 
@@ -68,7 +68,7 @@ Default options to provide to [AuthenticationClient](classes/AuthenticationClien
 
 #### Defined in
 
-[lib/Constants.ts:23](https://gitlab.com/ennovar1/OneNote/-/blob/9ecd859/lib/Constants.ts#L23)
+[lib/Constants.ts:23](https://gitlab.com/ennovar1/OneNote/-/blob/d999c8c/lib/Constants.ts#L23)
 
 ___
 
@@ -82,7 +82,7 @@ Default API Endpoint version.
 
 #### Defined in
 
-[lib/Constants.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/9ecd859/lib/Constants.ts#L11)
+[lib/Constants.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/d999c8c/lib/Constants.ts#L11)
 
 ___
 
@@ -96,7 +96,7 @@ Default URL for Graph requests.
 
 #### Defined in
 
-[lib/Constants.ts:17](https://gitlab.com/ennovar1/OneNote/-/blob/9ecd859/lib/Constants.ts#L17)
+[lib/Constants.ts:17](https://gitlab.com/ennovar1/OneNote/-/blob/d999c8c/lib/Constants.ts#L17)
 
 ## Pages
 
@@ -108,7 +108,7 @@ Page to render the home / landing page.
 
 #### Defined in
 
-[pages/index.tsx:10](https://gitlab.com/ennovar1/OneNote/-/blob/9ecd859/pages/index.tsx#L10)
+[pages/index.tsx:10](https://gitlab.com/ennovar1/OneNote/-/blob/d999c8c/pages/index.tsx#L10)
 
 ## Components
 
