@@ -18,7 +18,6 @@ export async function getServerSideProps(context: NextPageContext) {
   const request = await client.api(context);
 
   const response = await request.executeRequest();
-  console.log(response);
   return {
     props: {},
   };

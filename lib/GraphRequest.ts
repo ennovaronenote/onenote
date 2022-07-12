@@ -38,7 +38,7 @@ class GraphRequest {
   ): Promise<GraphRequest> {
     try {
       const { req, res } = context;
-      const cookieOptions = { req, res };
+      const cookieOptions = { req, res, maxAge: 0 };
       const tokenExists = hasCookie("token", cookieOptions);
 
       // Return instance without requesting new access token to prevent unnecessary requests
@@ -65,10 +65,12 @@ class GraphRequest {
 
       // Easier way to store errors / access token
       const accessToken = graphResponse["access_token"];
+      const maxAge: number = graphResponse["expires_in"];
       const error = graphResponse["error"];
 
       // If there was a valid access token response, send it to an HttpOnly cookie and return the instance
       if (accessToken) {
+        if (maxAge) cookieOptions["maxAge"] = maxAge;
         setCookie("token", accessToken, cookieOptions);
         return new GraphRequest(config, accessToken);
       }
