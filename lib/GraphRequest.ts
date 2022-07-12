@@ -8,7 +8,13 @@ import { NextPageContext } from "next";
 import { IClientOptions } from "./IClientOptions";
 
 class GraphRequest {
+  /** Access token to send with headers */
   #token: CookieValueTypes | string;
+
+  /** Complete URL to submit API requests */
+  #requestUrl: string;
+
+  /** Configuration options so the request knows the URL, type of request, etc... */
   config: IClientOptions;
 
   private constructor(
@@ -17,6 +23,7 @@ class GraphRequest {
   ) {
     this.config = config;
     this.#token = token;
+    this.#requestUrl = "";
   }
 
   /**
@@ -34,6 +41,7 @@ class GraphRequest {
       const cookieOptions = { req, res };
       const tokenExists = hasCookie("token", cookieOptions);
 
+      // Return instance without requesting new access token to prevent unnecessary requests
       if (tokenExists)
         return new GraphRequest(config, getCookie("token", cookieOptions));
 
@@ -77,8 +85,56 @@ class GraphRequest {
     }
   }
 
-  executeRequest() {
+  /**
+   * Public function for user to complete their API request after receiving the proper access tokens.
+   * @returns Data returned from Microsoft Graph
+   */
+  async executeRequest() {
+    this.constructUrl();
     if (!this.#token) return;
+    if (!this.#requestUrl) return;
+
+    try {
+      const graphRequest = await fetch(this.#requestUrl, {
+        headers: {
+          Authorization: `Bearer ${this.#token}`,
+        },
+      });
+      const graphResponse = await graphRequest.json();
+
+      return graphResponse;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  /**
+   * Construct a url that combines a proper link to request a Microsoft Graph resource.
+   * @private
+   * @returns If invalid, an empty string. Otherwise, the complete URL for the API request.
+   */
+  private constructUrl(): string {
+    const { baseUrl, userSelector, resource } = this.config;
+
+    if (userSelector?.charAt(0) === "/")
+      this.config.userSelector = userSelector.substring(1);
+
+    if (resource?.charAt(0) === "/")
+      this.config.resource = resource.substring(1);
+
+    if (baseUrl && userSelector && resource) {
+      this.#requestUrl = `${baseUrl}/${userSelector}/${resource}`;
+    }
+
+    if (!resource) {
+      this.#requestUrl = `${baseUrl}/${userSelector}`;
+    }
+
+    if (!userSelector) {
+      this.#requestUrl = "";
+    }
+
+    return this.#requestUrl;
   }
 }
 

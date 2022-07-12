@@ -25,7 +25,14 @@ class AuthenticationClient {
     return new AuthenticationClient(options);
   }
 
-  public async api(context: NextPageContext) {
+  public async api(context: NextPageContext, resource?: string) {
+    if (resource) {
+      this.config = {
+        ...this.config,
+        resource,
+      };
+    }
+
     return await GraphRequest.init(this.config, context);
   }
 }

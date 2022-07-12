@@ -35,7 +35,9 @@
 
 ### Functions
 
+- [ViewNotebooks](modules.md#viewnotebooks)
 - [getServerSideProps](modules.md#getserversideprops)
+- [getServerSideProps](modules.md#getserversideprops-1)
 
 ## Type Aliases
 
@@ -52,7 +54,7 @@
 
 #### Defined in
 
-[components/Navbar/Link.tsx:3](https://gitlab.com/ennovar1/OneNote/-/blob/523fc6c/components/Navbar/Link.tsx#L3)
+[components/Navbar/Link.tsx:3](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/components/Navbar/Link.tsx#L3)
 
 ## Variables
 
@@ -66,7 +68,7 @@ Default options to provide to [AuthenticationClient](classes/AuthenticationClien
 
 #### Defined in
 
-[lib/Constants.ts:23](https://gitlab.com/ennovar1/OneNote/-/blob/523fc6c/lib/Constants.ts#L23)
+[lib/Constants.ts:23](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/Constants.ts#L23)
 
 ___
 
@@ -80,7 +82,7 @@ Default API Endpoint version.
 
 #### Defined in
 
-[lib/Constants.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/523fc6c/lib/Constants.ts#L11)
+[lib/Constants.ts:11](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/Constants.ts#L11)
 
 ___
 
@@ -94,7 +96,7 @@ Default URL for Graph requests.
 
 #### Defined in
 
-[lib/Constants.ts:17](https://gitlab.com/ennovar1/OneNote/-/blob/523fc6c/lib/Constants.ts#L17)
+[lib/Constants.ts:17](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/Constants.ts#L17)
 
 ## Pages
 
@@ -106,7 +108,7 @@ Page to render the home / landing page.
 
 #### Defined in
 
-[pages/index.tsx:10](https://gitlab.com/ennovar1/OneNote/-/blob/523fc6c/pages/index.tsx#L10)
+[pages/index.tsx:10](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/pages/index.tsx#L10)
 
 ## Components
 
@@ -151,6 +153,38 @@ A container to hold necessary links for navigation.
 `Element`
 
 ## Functions
+
+### ViewNotebooks
+
+▸ **ViewNotebooks**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `any` |
+
+#### Returns
+
+`Element`
+
+___
+
+### getServerSideProps
+
+▸ **getServerSideProps**(`context`): `Promise`<{ `props`: {} = {} }\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `context` | `NextPageContext` |
+
+#### Returns
+
+`Promise`<{ `props`: {} = {} }\>
+
+___
 
 ### getServerSideProps
 

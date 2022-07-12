@@ -7,6 +7,8 @@
 ### Properties
 
 - [baseUrl](IClientOptions.md#baseurl)
+- [resource](IClientOptions.md#resource)
+- [userSelector](IClientOptions.md#userselector)
 
 ## Properties
 
@@ -16,4 +18,24 @@
 
 #### Defined in
 
-[lib/IClientOptions.ts:2](https://gitlab.com/ennovar1/OneNote/-/blob/523fc6c/lib/IClientOptions.ts#L2)
+[lib/IClientOptions.ts:2](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/IClientOptions.ts#L2)
+
+___
+
+### resource
+
+• `Optional` **resource**: `string`
+
+#### Defined in
+
+[lib/IClientOptions.ts:4](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/IClientOptions.ts#L4)
+
+___
+
+### userSelector
+
+• `Optional` **userSelector**: `string`
+
+#### Defined in
+
+[lib/IClientOptions.ts:3](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/IClientOptions.ts#L3)

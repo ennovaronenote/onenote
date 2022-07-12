@@ -39,19 +39,20 @@ Configuration to initialize the client with
 
 #### Defined in
 
-[lib/AuthenticationClient.ts:7](https://gitlab.com/ennovar1/OneNote/-/blob/523fc6c/lib/AuthenticationClient.ts#L7)
+[lib/AuthenticationClient.ts:7](https://gitlab.com/ennovar1/OneNote/-/blob/2491379/lib/AuthenticationClient.ts#L7)
 
 ## Methods
 
 ### api
 
-▸ **api**(`context`): `Promise`<[`GraphRequest`](GraphRequest.md)\>
+▸ **api**(`context`, `resource?`): `Promise`<[`GraphRequest`](GraphRequest.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `context` | `NextPageContext` |
+| `resource?` | `string` |
 
 #### Returns
 
