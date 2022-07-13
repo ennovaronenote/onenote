@@ -6,6 +6,7 @@ import TableCell from "./Cell";
  */
 function TableRow({ row }: { row: any }) {
   const { setData } = useCookies(row.dataType);
+
   return (
     <div className="table-row" onClick={() => setData(row)}>
       {Object.entries(row).map((cellData: any) => {
