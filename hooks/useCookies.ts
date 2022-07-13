@@ -37,7 +37,10 @@ const useCookies = (cookieName: string) => {
   useEffect(() => {
     try {
       const cookies = parse(document.cookie);
-      if (!cookies.cookieName) return;
+      if (!cookies[cookieName]) return;
+
+      const getCookie = JSON.parse(cookies[cookieName]);
+      setActiveCookie(getCookie);
     } catch (e) {
       console.error(`Error parsing cookies in hook ${e}`);
     }
