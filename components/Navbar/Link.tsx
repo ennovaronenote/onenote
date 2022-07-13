@@ -13,7 +13,9 @@ export type LinkProps = {
 function NavbarLink(props: LinkProps) {
   return (
     <Link href={props.href}>
-      <a className="px-10">{props.value}</a>
+      <div className="px-10 hover:text-neutral-700 hover:cursor-pointer">
+        {props.value}
+      </div>
     </Link>
   );
 }

@@ -6,7 +6,7 @@ import NavbarLinks from "./Links";
  */
 function NavbarContainer() {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto border-b-2 border-violet-300 py-3">
       <NavbarLinks />
     </div>
   );

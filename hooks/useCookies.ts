@@ -26,7 +26,13 @@ const useCookies = (cookieName: string) => {
     if (typeof window === "undefined") return false;
     try {
       const cookies = parse(document.cookie);
-      if (!cookies[key]) return undefined;
+      if (!cookies[key])
+        return {
+          error: {
+            code: "BadCookie",
+            message: `Invalid cookie requested: ${key}`,
+          },
+        };
 
       const parsed = JSON.parse(cookies[key]);
       return parsed;
