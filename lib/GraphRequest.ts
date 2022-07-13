@@ -91,7 +91,7 @@ class GraphRequest {
    * Public function for user to complete their API request after receiving the proper access tokens.
    * @returns Data returned from Microsoft Graph
    */
-  async executeRequest() {
+  async executeRequest(shouldReturnProps?: boolean) {
     this.constructUrl();
     if (!this.#token) return;
     if (!this.#requestUrl) return;
@@ -104,7 +104,17 @@ class GraphRequest {
       });
       const graphResponse = await graphRequest.json();
 
-      return graphResponse;
+      let returnedResponse: any = { ...graphResponse };
+
+      if (shouldReturnProps) {
+        returnedResponse = {
+          props: {
+            ...graphResponse,
+          },
+        };
+      }
+
+      return returnedResponse;
     } catch (e) {
       console.error(e);
     }
