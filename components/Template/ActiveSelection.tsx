@@ -1,5 +1,6 @@
 type TemplateActiveSelectionProps = {
   data: any;
+  label: string;
 };
 
 /**
@@ -8,7 +9,7 @@ type TemplateActiveSelectionProps = {
 function TemplateActiveSelection(props: TemplateActiveSelectionProps) {
   return (
     <div>
-      <span className="text-red-500">Notebook: </span>
+      <span>{props.label}: </span>
       {props.data.displayName}
     </div>
   );

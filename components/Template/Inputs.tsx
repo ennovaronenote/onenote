@@ -1,6 +1,9 @@
+import { ChangeEventHandler } from "react";
 import TemplateInput from "./Input";
 
-type TemplateInputsProps = {};
+type TemplateInputsProps = {
+  modifyHeader: ChangeEventHandler<HTMLInputElement>;
+};
 
 /**
  * @category Components
@@ -8,11 +11,13 @@ type TemplateInputsProps = {};
 function TemplateInputs(props: TemplateInputsProps) {
   return (
     <div>
-      <div className="w-1/2 mx-auto bg-green-500 my-5">
-        <div className="pb-5 text-2xl text-neutral-700 font-sans italic antialiased">
-          Template Creation
-        </div>
-        <TemplateInput type="text" placeholder="Header" inputName="header" />
+      <div className="">
+        <TemplateInput
+          type="text"
+          placeholder="Header"
+          inputName="header"
+          modifyHeader={props.modifyHeader}
+        />
       </div>
     </div>
   );

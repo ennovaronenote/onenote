@@ -1,7 +1,10 @@
+import { ChangeEventHandler } from "react";
+
 type TemplateInputProps = {
   type: string;
   placeholder: string;
   inputName: string;
+  modifyHeader: ChangeEventHandler<HTMLInputElement>;
   label?: string;
 };
 
@@ -18,7 +21,8 @@ function TemplateInput(props: TemplateInputProps) {
           type={props.type}
           placeholder={props.placeholder}
           name={props.inputName}
-          className="text-center border-2 border-sky-300 my-3 py-1 focus:outline-none focus:border-sky-400 hover:border-sky-400"
+          onChange={props.modifyHeader}
+          className="text-left text-neutral-700 border-2 border-violet-500 my-3 py-1 pl-3 focus:outline-none focus:border-violet-600 hover:border-violet-600"
         />
       </span>
     </div>
