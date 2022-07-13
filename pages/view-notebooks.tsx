@@ -16,7 +16,9 @@ function ViewNotebooks(props: any) {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-center text-3xl py-5">My Notebooks</h1>
+      <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
+        My Notebooks
+      </h1>
 
       <NotebookMain notebooks={props.value} />
     </div>

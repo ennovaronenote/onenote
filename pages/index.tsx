@@ -10,7 +10,9 @@ import { AUTH_CONFIG } from "../lib/Constants";
 const Home: NextPage = () => {
   return (
     <div className="container mx-auto">
-      <h1 className="text-center">Home Page</h1>
+      <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
+        Home Page
+      </h1>
     </div>
   );
 };

@@ -11,7 +11,6 @@ function NavbarLinks() {
       <NavbarLink href="/view-notebooks" value="View Notebooks" />
       <NavbarLink href="/view-sections" value="View Sections" />
       <NavbarLink href="/create-template" value="Create Template" />
-      <NavbarLink href="/" value="Login" />
     </div>
   );
 }

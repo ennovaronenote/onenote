@@ -33,7 +33,9 @@ function SectionMain({
       className="container mx-auto"
       onClick={() => setData(getCookieByKey("section"))}
     >
-      <h1 className="text-center text-3xl p-5">{notebookTitle}</h1>
+      <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
+        {notebookTitle}
+      </h1>
       <p className="text-center italic text-sm pb-1">
         Hint: if you click a row, the app will remember your selection!
       </p>
