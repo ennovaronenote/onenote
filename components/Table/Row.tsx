@@ -8,7 +8,10 @@ function TableRow({ row }: { row: any }) {
   const { setData } = useCookies(row.dataType);
 
   return (
-    <div className="table-row" onClick={() => setData(row)}>
+    <div
+      className="table-row odd:bg-blue-500 odd:text-white even:text-blue-500"
+      onClick={() => setData(row)}
+    >
       {Object.entries(row).map((cellData: any) => {
         const cellKey = `${row.id}_${cellData}`;
         const cellType = cellData[0] === "link" ? "link" : "string";

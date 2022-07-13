@@ -27,7 +27,7 @@ function TableCell({ text, cellType }: TableCellProps) {
   if (typeof cellContent !== "string") return <></>;
 
   return (
-    <div className="table-cell border-solid border-b-2 border-y-violet-400 m-2 text-center py-3 text-blue-500">
+    <div className="table-cell m-2 text-center py-3">
       {linkContent ? linkContent : cellContent}
     </div>
   );

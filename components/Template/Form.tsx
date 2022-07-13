@@ -65,6 +65,8 @@ function TemplateForm(props: TemplateFormProps) {
 
   return (
     <>
+      <TemplatePreview headers={headers} rows={rows} />
+
       <div className="w-1/2 mx-auto my-5 pb-10 bg-blue-500/75 border border-violet-500 text-center text-white">
         <div className="prose-2xl text-white py-5">Template Creation</div>
 
@@ -81,8 +83,6 @@ function TemplateForm(props: TemplateFormProps) {
           {props.section.displayName || ""} section.
         </p>
       </div>
-
-      <TemplatePreview headers={headers} rows={rows} />
     </>
   );
 }
