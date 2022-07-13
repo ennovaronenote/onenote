@@ -1,11 +1,17 @@
 import useCookies from "../../hooks/useCookies";
 import TableCell from "./Cell";
 
+type TableRowProps = {
+  row: any;
+  customDataType?: string;
+};
+
 /**
  * @group Components
  */
-function TableRow({ row }: { row: any }) {
-  const { setData } = useCookies(row.dataType);
+function TableRow(props: TableRowProps) {
+  const { row, customDataType = props.row.dataType } = props;
+  const { setData } = useCookies(customDataType);
 
   return (
     <div

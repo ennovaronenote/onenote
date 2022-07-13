@@ -18,7 +18,11 @@ function TemplatePreview(props: TemplatePreviewProps) {
         Preview of Template
       </div>
 
-      <TableContainer headers={props.headers} rows={[props.rows]} />
+      <TableContainer
+        headers={props.headers}
+        rows={[props.rows]}
+        customDataType="previewRows"
+      />
     </div>
   );
 }

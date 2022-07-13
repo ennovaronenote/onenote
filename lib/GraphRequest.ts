@@ -4,6 +4,7 @@ import {
   hasCookie,
   setCookie,
 } from "cookies-next";
+import { OptionsType } from "cookies-next/lib/types";
 import { NextPageContext } from "next";
 import { IClientOptions } from "./IClientOptions";
 
@@ -38,7 +39,12 @@ class GraphRequest {
   ): Promise<GraphRequest> {
     try {
       const { req, res } = context;
-      const cookieOptions = { req, res, maxAge: 0 };
+      const cookieOptions: OptionsType = {
+        req,
+        res,
+        maxAge: 0,
+        sameSite: "lax",
+      };
       const tokenExists = hasCookie("token", cookieOptions);
 
       // Return instance without requesting new access token to prevent unnecessary requests
@@ -105,7 +111,6 @@ class GraphRequest {
       const graphResponse = await graphRequest.json();
 
       let returnedResponse: any = { ...graphResponse };
-
       if (shouldReturnProps) {
         returnedResponse = {
           props: {

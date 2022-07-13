@@ -26,13 +26,15 @@ const useCookies = (cookieName: string) => {
     if (typeof window === "undefined") return false;
     try {
       const cookies = parse(document.cookie);
-      if (!cookies[key])
+      if (!cookies[key]) {
+        document.cookie = `${key}="";SameSite=lax`;
         return {
           error: {
             code: "BadCookie",
             message: `Invalid cookie requested: ${key}`,
           },
         };
+      }
 
       const parsed = JSON.parse(cookies[key]);
       return parsed;
@@ -45,16 +47,7 @@ const useCookies = (cookieName: string) => {
   };
 
   useEffect(() => {
-    // try {
-    //   const cookies = parse(document.cookie);
-    //   if (!cookies[cookieName]) return;
-
-    //   const getCookie = JSON.parse(cookies[cookieName]);
-    //   setActiveCookie(getCookie);
-    // } catch (e) {
-    //   console.error(`Error parsing cookies in hook ${e}`);
-    // }
-    setActiveCookie(getCookieByKey(cookieName));
+    if (cookieName) setActiveCookie(getCookieByKey(cookieName));
   }, [cookieName]);
 
   return {

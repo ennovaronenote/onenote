@@ -4,17 +4,19 @@ import TableHeaders from "./Headers";
 type TableContainerProps = {
   headers: string[];
   rows: any[];
+  customDataType?: string;
 };
 
 /**
  * Reusable table container so that rendering data is easier.
  * @group Components
  */
-function TableContainer({ headers, rows }: TableContainerProps) {
+function TableContainer(props: TableContainerProps) {
+  const { headers, rows, customDataType } = props;
   return (
     <div className="table w-3/4 mx-auto">
       <TableHeaders headers={headers} />
-      <TableBody rows={rows} />
+      <TableBody rows={rows} customDataType={customDataType} />
     </div>
   );
 }

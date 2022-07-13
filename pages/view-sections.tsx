@@ -39,6 +39,17 @@ export async function getServerSideProps(context: NextPageContext) {
   const cookies = parse(context.req?.headers?.cookie || "");
   const amountOfCookies = Object.keys(cookies).length;
 
+  if (amountOfCookies === 0) {
+    return {
+      props: {
+        error: {
+          code: "NoCookies",
+          message: "No cookies were found! Try again.",
+        },
+      },
+    };
+  }
+
   // Prevent Graph requests if no selected notebook was found in cookies
   if (amountOfCookies !== 0 && !cookies["notebook"]) {
     return {

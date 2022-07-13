@@ -29,7 +29,7 @@ function NotebookMain({ notebooks }: { notebooks: any }) {
       <p className="text-center italic text-sm pb-1">
         Hint: if you click a row, the app will remember your selection!
       </p>
-      {currentSelection}
+      {currentSelection && currentSelection}
 
       <TableContainer
         headers={["Notebook Title", "OneNote Link", "Creation Date"]}

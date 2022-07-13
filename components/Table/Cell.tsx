@@ -11,7 +11,9 @@ type TableCellProps = {
  */
 function TableCell({ text, cellType }: TableCellProps) {
   const [cellContent, setCellContent] = useState<string>(text);
-  const [linkContent, setLinkContent] = useState<JSX.Element>();
+  const [linkContent, setLinkContent] = useState<JSX.Element | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (cellType === "link") {
@@ -24,11 +26,9 @@ function TableCell({ text, cellType }: TableCellProps) {
     }
   }, [cellType, text]);
 
-  if (typeof cellContent !== "string") return <></>;
-
   return (
     <div className="table-cell m-2 text-center py-3">
-      {linkContent ? linkContent : cellContent}
+      {typeof text === "object" ? linkContent : cellContent}
     </div>
   );
 }

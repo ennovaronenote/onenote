@@ -30,8 +30,6 @@ function TemplateForm(props: TemplateFormProps) {
 
   const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
     const headerInputValue = event.target.value;
-    if (!headerInputValue) return;
-
     setHeader(headerInputValue);
   };
 
@@ -61,6 +59,7 @@ function TemplateForm(props: TemplateFormProps) {
       headers: newHeaders,
       rows: sampleRows,
     });
+    setHeader("");
   };
 
   return (
@@ -75,7 +74,7 @@ function TemplateForm(props: TemplateFormProps) {
           <TemplateActiveSelection label="Section" data={props.section} />
         </div>
 
-        <TemplateInputs modifyHeader={modifyHeader} />
+        <TemplateInputs modifyHeader={modifyHeader} header={header} />
         <TemplateButtons handleSubmit={handleSubmit} />
 
         <p className="pt-5 italic">
