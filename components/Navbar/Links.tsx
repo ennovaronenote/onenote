@@ -12,6 +12,7 @@ function NavbarLinks() {
       <NavbarLink href="/view-sections" value="View Sections" />
       <NavbarLink href="/view-pages" value="View Pages" />
       <NavbarLink href="/create-template" value="Create Template" />
+      <NavbarLink href="/universal" value="Universal (experimental)" />
     </div>
   );
 }
