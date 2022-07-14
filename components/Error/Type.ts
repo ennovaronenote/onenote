@@ -9,6 +9,7 @@ type InnerErrorType = {
  * @category Components
  */
 type ErrorType<T> = {
+  error?: boolean;
   code?: T;
   message?: string;
   innerError?: InnerErrorType;

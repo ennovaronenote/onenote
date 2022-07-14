@@ -6,6 +6,7 @@ import {
 } from "cookies-next";
 import { OptionsType } from "cookies-next/lib/types";
 import { NextPageContext } from "next";
+import { Debug } from "./Debug";
 import { IClientOptions } from "./IClientOptions";
 
 class GraphRequest {
@@ -109,28 +110,26 @@ class GraphRequest {
         },
       });
       const graphResponse = await graphRequest.json();
-      const debug = {
+      const debugOutput = {
         url: this.#requestUrl,
       };
+
       let returnedResponse: any = {
         ...graphResponse,
-        debug,
+        debugOutput,
       };
-
-      if (process.env.DEBUG) {
-        console.log("/*********DEBUG BEGIN*********\\");
-        console.log(debug);
-        console.log("/*********DEBUG FINISH*********\\");
-      }
 
       if (shouldReturnProps) {
         returnedResponse = {
           props: {
             ...graphResponse,
-            debug,
+            debugOutput,
           },
         };
       }
+
+      const debug = Debug.init(debugOutput);
+      debug.printDebugOutput();
 
       return returnedResponse;
     } catch (e) {

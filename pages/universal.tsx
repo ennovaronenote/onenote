@@ -1,21 +1,18 @@
 import { useEffect } from "react";
-import useCookies from "../hooks/useCookies";
+import useErrors from "../hooks/useErrors";
 
 /**
  * @group Pages
  */
 function Universal() {
-  const { getCookieByKey, activeCookie } = useCookies("notebook");
+  const test = useErrors({
+    cookieName: "notebook",
+    propertyToValidate: "",
+  });
 
-  useEffect(() => {
-    console.log(activeCookie);
-  }, [activeCookie]);
+  useEffect(() => {}, []);
 
-  return (
-    <div>
-      <p>Universal</p>
-    </div>
-  );
+  return <div></div>;
 }
 
 export default Universal;
