@@ -3,7 +3,7 @@ import { ErrorType } from "../components/Error/Type";
 import { Debug } from "../lib/Debug";
 import useCookies from "./useCookies";
 
-type HandleErrorProps = {
+type HandleResponseProps = {
   cookieName: string;
   propertyToValidate: string;
   pageProps?: any;
@@ -13,16 +13,18 @@ type HandleErrorProps = {
  * @group Components
  * @param options
  */
-function useErrors(options: HandleErrorProps) {
+function useResponse(options: HandleResponseProps) {
   const { getCookieByKey } = useCookies(options.cookieName);
   const { pageProps = {} } = options;
   const [error, setError] = useState<ErrorType<string>>({ error: false });
   const [selectedData, setSelectedData] = useState<string>("");
+  const [cookieData, setCookieData] = useState<any>();
 
   useEffect(() => {
     const data = getCookieByKey(options.cookieName);
     const suppliedPageProps = Object.keys(pageProps).length !== 0;
 
+    // Validate ID property of cookie
     if (!data["id"]) {
       setError({
         error: true,
@@ -31,6 +33,7 @@ function useErrors(options: HandleErrorProps) {
       });
     }
 
+    // Response if MSGraph request returned an error
     if (suppliedPageProps && pageProps["error"]) {
       setError({
         error: true,
@@ -38,19 +41,34 @@ function useErrors(options: HandleErrorProps) {
       });
     }
 
-    if (suppliedPageProps && data["displayName"]) {
-      setSelectedData(data["displayName"]);
+    // Ensures there's a display name/title to render.
+    const { displayName } = data;
+    if (displayName) {
+      setSelectedData(displayName);
     }
 
+    // Debug class is created and will console.log() any object specified as long as an environment variable is set
     const debug = Debug.init({
-      debugSrc: "hooks/useErrors",
+      debugSrc: "hooks/useResponse.ts",
       data,
       debugType: "object",
+      suppliedPageProps,
+      selectedData,
+      error,
+      pageProps,
+      shouldDebug: true,
     });
     debug.printDebugOutput();
+
+    setCookieData(data);
   }, []);
 
-  return error;
+  return {
+    error,
+    selectedData,
+    cookieData,
+  };
 }
 
-export default useErrors;
+export type { HandleResponseProps };
+export default useResponse;

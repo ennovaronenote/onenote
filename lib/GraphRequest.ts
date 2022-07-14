@@ -112,6 +112,8 @@ class GraphRequest {
       const graphResponse = await graphRequest.json();
       const debugOutput = {
         url: this.#requestUrl,
+        debugSrc: "lib/GraphRequest.ts",
+        shouldDebug: false,
       };
 
       let returnedResponse: any = {
@@ -142,20 +144,37 @@ class GraphRequest {
    * @private
    * @returns If invalid, an empty string. Otherwise, the complete URL for the API request.
    */
-  private constructUrl(): string {
-    const { baseUrl, userSelector, resource } = this.config;
+  constructUrl(): string {
+    const { baseUrl = "", userSelector = "" } = this.config;
 
     if (userSelector?.charAt(0) === "/")
       this.config.userSelector = userSelector.substring(1);
 
-    if (resource?.charAt(0) === "/")
-      this.config.resource = resource.substring(1);
+    function parseResource(urlLength: number, resource?: string): string {
+      let resourceCopy = resource || "";
+      if (!resourceCopy) return "";
 
-    if (baseUrl && userSelector && resource) {
-      this.#requestUrl = `${baseUrl}/${userSelector}/${resource}`;
+      if (resourceCopy.charAt(0) === "/")
+        resourceCopy = resourceCopy.substring(1);
+
+      const checkResource = resourceCopy.substring(0, urlLength);
+      if (checkResource === baseUrl || checkResource === userSelector) {
+        return parseResource(
+          userSelector.length,
+          resourceCopy.substring(checkResource.length)
+        );
+      }
+
+      return resourceCopy;
     }
 
-    if (!resource) {
+    this.config.resource = parseResource(baseUrl.length, this.config.resource);
+
+    if (baseUrl && userSelector && this.config.resource) {
+      this.#requestUrl = `${baseUrl}/${userSelector}/${this.config.resource}`;
+    }
+
+    if (!this.config.resource) {
       this.#requestUrl = `${baseUrl}/${userSelector}`;
     }
 

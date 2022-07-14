@@ -18,6 +18,7 @@ class Debug {
       error: false,
       genericMessage: "",
       debugType: "keyByKey",
+      shouldDebug: process.env.NEXT_PUBLIC_DEBUG || false,
     };
 
     const options = Object.assign(defaultConfig, config || {});
@@ -25,16 +26,14 @@ class Debug {
   }
 
   printDebugOutput(): boolean {
-    if (!process.env) return false;
-
-    const { NEXT_PUBLIC_DEBUG, DEBUG } = process.env;
-    const debugEnabled = NEXT_PUBLIC_DEBUG || DEBUG;
-    if (!debugEnabled) return false;
+    if (!this.#config.shouldDebug) return false;
 
     const configOptions = Object.entries(this.#config) || [];
 
     if (this.#config.debugType === "object") {
+      console.log(this.#debugStartText);
       console.log(this.#config);
+      console.log(this.#debugFinishText);
       return true;
     }
 
@@ -49,7 +48,7 @@ class Debug {
     console.log(this.#debugStartText);
     configOptions.map((option: [string, any]) => {
       const [key, value] = option;
-      console.log(`${key}: ${JSON.stringify(value)}`);
+      console.log(`${key} = ${JSON.stringify(value)}`);
     });
     console.log(this.#debugFinishText);
 

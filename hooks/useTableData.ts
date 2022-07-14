@@ -11,6 +11,7 @@ const useTableData = () => {
         link: {
           displayText: `Click here to access ${dataType} in OneNote`,
           href: content.links.oneNoteWebUrl.href,
+          graphResource: `${content.self}`,
         },
         creationDate: new Date(content.createdDateTime).toLocaleString(),
       };
