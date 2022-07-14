@@ -13,4 +13,5 @@ function TableHeaderCell({ header }: TableHeaderCellProps) {
   );
 }
 
+export type { TableHeaderCellProps };
 export default TableHeaderCell;

@@ -19,4 +19,5 @@ function TableHeaders({ headers }: TableHeadersProps) {
   );
 }
 
+export type { TableHeadersProps };
 export default TableHeaders;

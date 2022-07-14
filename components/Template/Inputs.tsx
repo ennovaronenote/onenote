@@ -7,7 +7,7 @@ type TemplateInputsProps = {
 };
 
 /**
- * @category Components
+ * @group Components
  */
 function TemplateInputs(props: TemplateInputsProps) {
   return (

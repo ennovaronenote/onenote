@@ -4,7 +4,7 @@ type TemplateActiveSelectionProps = {
 };
 
 /**
- * @category Components
+ * @group Components
  */
 function TemplateActiveSelection(props: TemplateActiveSelectionProps) {
   return (

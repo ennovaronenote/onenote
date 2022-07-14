@@ -109,12 +109,19 @@ class GraphRequest {
         },
       });
       const graphResponse = await graphRequest.json();
+      const debug = {
+        url: this.#requestUrl,
+      };
+      let returnedResponse: any = {
+        ...graphResponse,
+        debug,
+      };
 
-      let returnedResponse: any = { ...graphResponse };
       if (shouldReturnProps) {
         returnedResponse = {
           props: {
             ...graphResponse,
+            debug,
           },
         };
       }

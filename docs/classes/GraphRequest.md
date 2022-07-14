@@ -43,7 +43,7 @@ Complete URL to submit API requests
 
 #### Defined in
 
-[lib/GraphRequest.ts:15](https://gitlab.com/ennovar1/OneNote/-/blob/3185caa/lib/GraphRequest.ts#L15)
+[lib/GraphRequest.ts:16](https://gitlab.com/ennovar1/OneNote/-/blob/de56a48/lib/GraphRequest.ts#L16)
 
 ___
 
@@ -55,7 +55,7 @@ Access token to send with headers
 
 #### Defined in
 
-[lib/GraphRequest.ts:12](https://gitlab.com/ennovar1/OneNote/-/blob/3185caa/lib/GraphRequest.ts#L12)
+[lib/GraphRequest.ts:13](https://gitlab.com/ennovar1/OneNote/-/blob/de56a48/lib/GraphRequest.ts#L13)
 
 ___
 
@@ -67,7 +67,7 @@ Configuration options so the request knows the URL, type of request, etc...
 
 #### Defined in
 
-[lib/GraphRequest.ts:18](https://gitlab.com/ennovar1/OneNote/-/blob/3185caa/lib/GraphRequest.ts#L18)
+[lib/GraphRequest.ts:19](https://gitlab.com/ennovar1/OneNote/-/blob/de56a48/lib/GraphRequest.ts#L19)
 
 ## Methods
 
@@ -87,9 +87,15 @@ ___
 
 ### executeRequest
 
-▸ **executeRequest**(): `Promise`<`any`\>
+▸ **executeRequest**(`shouldReturnProps?`): `Promise`<`any`\>
 
 Public function for user to complete their API request after receiving the proper access tokens.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `shouldReturnProps?` | `boolean` |
 
 #### Returns
 

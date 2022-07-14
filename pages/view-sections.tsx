@@ -5,6 +5,9 @@ import { parse } from "cookie";
 import SectionMain from "../components/Section/Main";
 import ErrorMessage from "../components/Error/Message";
 import useCookies from "../hooks/useCookies";
+import validateCookie from "../lib/validateCookie";
+import { useEffect, useState } from "react";
+import { ErrorType } from "../components/Error/Type";
 
 /**
  * Page to view list of sections. This page needs a notebook ID to make a graph request, so it validates the selected notebook via cookies.
@@ -13,57 +16,45 @@ import useCookies from "../hooks/useCookies";
  * @returns
  */
 function ViewSections(props: any) {
+  const [foundError, setFoundError] = useState<boolean>(false);
+  const [error, setError] = useState<ErrorType<string>>({});
   const { getCookieByKey } = useCookies("section");
 
-  if (props["error"]) return <ErrorMessage error={props.error} />;
-  if (!props.value)
-    return <p className="text-center">Loading your sections, please wait.</p>;
+  useEffect(() => {
+    if (!getCookieByKey("notebook")["id"]) {
+      setError({
+        code: "NoCookie",
+        message: "Cookie was not found",
+      });
+      setFoundError(true);
+    }
 
-  if (!getCookieByKey("notebook")["id"])
-    return (
-      <ErrorMessage
-        error={{ code: "BadNotebook", message: "Notebook not detected." }}
+    if (props["error"]) {
+      setError(props.error);
+      setFoundError(true);
+    }
+
+    if (props.value) setFoundError(false);
+  }, [props, getCookieByKey]);
+
+  return foundError ? (
+    <ErrorMessage error={error} />
+  ) : (
+    <>
+      <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
+        My Notebooks
+      </h1>
+      <SectionMain
+        sections={props.value}
+        notebookTitle={getCookieByKey("notebook")["displayName"]}
       />
-    );
-
-  return (
-    <SectionMain
-      sections={props.value}
-      notebookTitle={getCookieByKey("notebook")["displayName"]}
-    />
+    </>
   );
 }
 
 /** @ignore */
 export async function getServerSideProps(context: NextPageContext) {
-  const cookies = parse(context.req?.headers?.cookie || "");
-  const amountOfCookies = Object.keys(cookies).length;
-
-  if (amountOfCookies === 0) {
-    return {
-      props: {
-        error: {
-          code: "NoCookies",
-          message: "No cookies were found! Try again.",
-        },
-      },
-    };
-  }
-
-  // Prevent Graph requests if no selected notebook was found in cookies
-  if (amountOfCookies !== 0 && !cookies["notebook"]) {
-    return {
-      props: {
-        error: {
-          code: "BadNotebook",
-          message:
-            "The notebook either was not selected or was incorrectly detected!",
-        },
-      },
-    };
-  }
-
-  const parsedNotebook = JSON.parse(cookies["notebook"]);
+  const parsedNotebook = validateCookie({ cookie: context, key: "notebook" });
   const notebookId = parsedNotebook.id;
 
   const client = AuthenticationClient.init({

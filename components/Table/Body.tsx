@@ -5,8 +5,11 @@ type TableBodyProps = {
   customDataType?: string;
 };
 
+/**
+ * @group Components
+ */
 function TableBody(props: TableBodyProps) {
-  const { rows, customDataType } = props;
+  const { rows = [], customDataType } = props;
   if (rows.length === 0) return <></>;
   return <TableRows rows={rows} customDataType={customDataType} />;
 }

@@ -7,16 +7,27 @@ import { ErrorType } from "./Type";
 function ErrorMessage({ error }: { error: ErrorType<any> }) {
   if (!error) return <></>;
 
-  const errorCode = <p className="text-center">Code: {error.code}</p>;
-  const errorMessage = <p className="text-center">Message: {error.message}</p>;
+  const errorCode = (
+    <p className="text-center" suppressHydrationWarning>
+      Code: {error.code}
+    </p>
+  );
+  const errorMessage = (
+    <p className="text-center" suppressHydrationWarning>
+      Message: {error.message}
+    </p>
+  );
 
   return (
-    <div className="container mx-auto">
-      <h1 className="text-center text-red-500 text-xl py-3">
+    <div className="container mx-auto" suppressHydrationWarning>
+      <div
+        className="text-center text-red-500 text-xl py-3"
+        suppressHydrationWarning
+      >
         An error has occurred! See more details below.
-      </h1>
+      </div>
 
-      <div className="container">
+      <div className="container" suppressHydrationWarning>
         {error.code && errorCode}
         {error.message && errorMessage}
       </div>

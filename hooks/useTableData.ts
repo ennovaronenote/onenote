@@ -1,6 +1,7 @@
 const useTableData = () => {
-  const parseData = (data: any[], dataType: string) => {
+  const parseData = (data: any[] = [], dataType: string): any[] => {
     const newDataTable: any[] = [];
+    if (data.length === 0) return [];
     data.map((content: any) => {
       const newData = {
         dataType,

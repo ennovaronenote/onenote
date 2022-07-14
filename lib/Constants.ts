@@ -12,7 +12,7 @@ const GRAPH_API_VERSION: string = "v1.0";
  * Default URL for Graph requests.
  * @category Configuration
  */
-const GRAPH_BASE_URL: string = "http://graph.microsoft.com/";
+const GRAPH_BASE_URL: string = "https://graph.microsoft.com/";
 
 /**
  * @constant

@@ -4,6 +4,10 @@ type InnerErrorType = {
   "client-request-id"?: string;
 };
 
+/**
+ * @group Types
+ * @category Components
+ */
 type ErrorType<T> = {
   code?: T;
   message?: string;

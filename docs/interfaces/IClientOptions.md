@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[lib/IClientOptions.ts:2](https://gitlab.com/ennovar1/OneNote/-/blob/3185caa/lib/IClientOptions.ts#L2)
+[lib/IClientOptions.ts:2](https://gitlab.com/ennovar1/OneNote/-/blob/de56a48/lib/IClientOptions.ts#L2)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[lib/IClientOptions.ts:4](https://gitlab.com/ennovar1/OneNote/-/blob/3185caa/lib/IClientOptions.ts#L4)
+[lib/IClientOptions.ts:4](https://gitlab.com/ennovar1/OneNote/-/blob/de56a48/lib/IClientOptions.ts#L4)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[lib/IClientOptions.ts:3](https://gitlab.com/ennovar1/OneNote/-/blob/3185caa/lib/IClientOptions.ts#L3)
+[lib/IClientOptions.ts:3](https://gitlab.com/ennovar1/OneNote/-/blob/de56a48/lib/IClientOptions.ts#L3)

@@ -6,6 +6,9 @@ type TemplateButtonProps = {
   handleSubmit?: MouseEventHandler<HTMLButtonElement>;
 };
 
+/**
+ * @group Components
+ */
 function TemplateButton(props: TemplateButtonProps) {
   return (
     <button
@@ -23,4 +26,5 @@ function TemplateButton(props: TemplateButtonProps) {
   );
 }
 
+export type { TemplateButtonProps };
 export default TemplateButton;

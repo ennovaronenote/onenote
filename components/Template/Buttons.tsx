@@ -6,7 +6,7 @@ type TemplateButtonsProps = {
 };
 
 /**
- * @category Components
+ * @group Components
  */
 function TemplateButtons(props: TemplateButtonsProps) {
   return (

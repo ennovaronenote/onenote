@@ -15,4 +15,5 @@ function TableRows(props: TableRowsProps) {
   ));
 }
 
+export type { TableRowsProps };
 export default TableRows;

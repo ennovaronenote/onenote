@@ -7,7 +7,7 @@ type TemplatePreviewProps = {
 };
 
 /**
- * @category Components
+ * @group Components
  */
 function TemplatePreview(props: TemplatePreviewProps) {
   if (props.headers.length === 0 || props.rows.length === 0) return <></>;

@@ -11,7 +11,7 @@ type TemplateInputProps = {
 };
 
 /**
- * @category Components
+ * @group Components
  */
 function TemplateInput(props: TemplateInputProps) {
   const { shouldFocus = false } = props;
