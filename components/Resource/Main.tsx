@@ -3,12 +3,19 @@ import useCookies from "../../hooks/useCookies";
 import useTableData from "../../hooks/useTableData";
 import TableContainer from "../Table/Container";
 
+type ResourceMainProps = {
+  resource: any;
+  cookieKey: string;
+  tableCookieKey?: string;
+  headers: any[];
+};
+
 /**
  * @group Components
  */
-function NotebookMain({ notebooks }: { notebooks: any }) {
+function ResourceMain(props: ResourceMainProps) {
+  const { setData, getCookieByKey, activeCookie } = useCookies(props.cookieKey);
   const { parseData } = useTableData();
-  const { activeCookie, getCookieByKey, setData } = useCookies("notebook");
   const [currentSelection, setCurrentSelection] = useState<JSX.Element>();
 
   useEffect(() => {
@@ -24,19 +31,23 @@ function NotebookMain({ notebooks }: { notebooks: any }) {
   return (
     <div
       className="container mx-auto"
-      onClick={() => setData(getCookieByKey("notebook"))}
+      onClick={() => {
+        return setData(getCookieByKey(props.tableCookieKey || "notebook"));
+      }}
     >
       <p className="text-center italic text-sm pb-1">
         Hint: if you click a row, the app will remember your selection!
       </p>
-      {currentSelection && currentSelection}
+
+      {currentSelection}
 
       <TableContainer
-        headers={["Notebook Title", "OneNote Link", "Creation Date"]}
-        rows={parseData(notebooks, "notebook")}
+        headers={props.headers}
+        rows={parseData(props.resource, props.cookieKey)}
       />
     </div>
   );
 }
 
-export default NotebookMain;
+export type { ResourceMainProps };
+export default ResourceMain;

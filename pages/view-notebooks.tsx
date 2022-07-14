@@ -1,8 +1,8 @@
-import ErrorMessage from "../components/Error/Message";
-import NotebookMain from "../components/Notebook/Main";
 import { NextPageContext } from "next";
 import { AuthenticationClient } from "../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../lib/Constants";
+import ErrorMessage from "../components/Error/Message";
+import ResourceMain from "../components/Resource/Main";
 
 /**
  * Page to render list of notebooks
@@ -20,7 +20,12 @@ function ViewNotebooks(props: any) {
         My Notebooks
       </h1>
 
-      <NotebookMain notebooks={props.value} />
+      <ResourceMain
+        resource={props.value}
+        cookieKey="notebook"
+        tableCookieKey="notebook"
+        headers={["Notebook Name", "OneNote Link", "Creation Date"]}
+      />
     </div>
   );
 }

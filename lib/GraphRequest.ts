@@ -117,6 +117,12 @@ class GraphRequest {
         debug,
       };
 
+      if (process.env.DEBUG) {
+        console.log("/*********DEBUG BEGIN*********\\");
+        console.log(debug);
+        console.log("/*********DEBUG FINISH*********\\");
+      }
+
       if (shouldReturnProps) {
         returnedResponse = {
           props: {

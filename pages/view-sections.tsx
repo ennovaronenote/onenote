@@ -1,13 +1,12 @@
 import { NextPageContext } from "next";
 import { AuthenticationClient } from "../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../lib/Constants";
-import { parse } from "cookie";
-import SectionMain from "../components/Section/Main";
+import { useEffect, useState } from "react";
+import { ErrorType } from "../components/Error/Type";
+import ResourceMain from "../components/Resource/Main";
 import ErrorMessage from "../components/Error/Message";
 import useCookies from "../hooks/useCookies";
 import validateCookie from "../lib/validateCookie";
-import { useEffect, useState } from "react";
-import { ErrorType } from "../components/Error/Type";
 
 /**
  * Page to view list of sections. This page needs a notebook ID to make a graph request, so it validates the selected notebook via cookies.
@@ -18,6 +17,7 @@ import { ErrorType } from "../components/Error/Type";
 function ViewSections(props: any) {
   const [foundError, setFoundError] = useState<boolean>(false);
   const [error, setError] = useState<ErrorType<string>>({});
+  const [selectedNotebook, setSelectedNotebook] = useState<string>("");
   const { getCookieByKey } = useCookies("section");
 
   useEffect(() => {
@@ -34,6 +34,7 @@ function ViewSections(props: any) {
       setFoundError(true);
     }
 
+    setSelectedNotebook(getCookieByKey("notebook")["displayName"]);
     if (props.value) setFoundError(false);
   }, [props, getCookieByKey]);
 
@@ -42,11 +43,14 @@ function ViewSections(props: any) {
   ) : (
     <>
       <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
-        My Notebooks
+        {selectedNotebook}
       </h1>
-      <SectionMain
-        sections={props.value}
-        notebookTitle={getCookieByKey("notebook")["displayName"]}
+
+      <ResourceMain
+        resource={props.value}
+        cookieKey="section"
+        tableCookieKey="section"
+        headers={["Section Title", "OneNote Link", "Creation Date"]}
       />
     </>
   );
