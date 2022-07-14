@@ -35,11 +35,11 @@ function ResourceMain(props: ResourceMainProps) {
         return setData(getCookieByKey(props.tableCookieKey || "notebook"));
       }}
     >
-      <p className="text-center italic text-sm pb-1">
+      <div className="text-center italic text-sm pb-3">
         Hint: if you click a row, the app will remember your selection!
-      </p>
+      </div>
 
-      {currentSelection}
+      <div>{currentSelection}</div>
 
       <TableContainer
         headers={props.headers}
