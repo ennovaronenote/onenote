@@ -5,7 +5,7 @@ import {
   setCookie,
 } from "cookies-next";
 import { OptionsType } from "cookies-next/lib/types";
-import { NextPageContext } from "next";
+import { NextApiRequest, NextPageContext } from "next";
 import { Debug } from "./Debug";
 import { IClientOptions } from "./IClientOptions";
 
@@ -36,10 +36,15 @@ class GraphRequest {
    */
   static async init(
     config: IClientOptions,
-    context: NextPageContext
+    context: NextPageContext | NextApiRequest,
+    req: NextApiRequest | undefined
   ): Promise<GraphRequest> {
     try {
-      const { req, res } = context;
+      if (context as NextApiRequest) {
+        console.log("It's from the API");
+        return new GraphRequest(config, "");
+      }
+
       const cookieOptions: OptionsType = {
         req,
         res,

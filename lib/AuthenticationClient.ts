@@ -1,4 +1,4 @@
-import { NextPageContext } from "next";
+import { NextApiRequest, NextPageContext } from "next";
 import { GraphRequest } from "./GraphRequest";
 import { IClientOptions } from "./IClientOptions";
 
@@ -25,7 +25,10 @@ class AuthenticationClient {
     return new AuthenticationClient(options);
   }
 
-  public async api(context: NextPageContext, resource?: string) {
+  public async api(
+    context: NextPageContext | NextApiRequest,
+    resource?: string
+  ) {
     if (resource) {
       this.config = {
         ...this.config,

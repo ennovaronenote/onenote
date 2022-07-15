@@ -1,5 +1,9 @@
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import useCookies from "../../hooks/useCookies";
+import {
+  OneNoteRequest,
+  OneNoteRequestOptions,
+} from "../../lib/OneNoteRequest";
 import TemplateActiveSelection from "./ActiveSelection";
 import TemplateButtons from "./Buttons";
 import TemplateInputs from "./Inputs";
@@ -62,6 +66,23 @@ function TemplateForm(props: TemplateFormProps) {
     setHeader("");
   };
 
+  const sendTableToGraph = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    const config: OneNoteRequestOptions = {
+      headers,
+      rows,
+    };
+    const onenoteRequest = new OneNoteRequest(config);
+    const table = onenoteRequest.parseTableToSend();
+    const sendData = await fetch("http://localhost:3000/api/send-to-onenote", {
+      method: "POST",
+      body: JSON.stringify({
+        table,
+      }),
+    });
+  };
+
   return (
     <>
       <TemplatePreview headers={headers} rows={rows} />
@@ -75,7 +96,10 @@ function TemplateForm(props: TemplateFormProps) {
         </div>
 
         <TemplateInputs modifyHeader={modifyHeader} header={header} />
-        <TemplateButtons handleSubmit={handleSubmit} />
+        <TemplateButtons
+          handleSubmit={handleSubmit}
+          sendTableToGraph={sendTableToGraph}
+        />
 
         <p className="pt-5 italic">
           Note: when you create a template, it will be stored in the{" "}
