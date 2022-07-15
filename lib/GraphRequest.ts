@@ -5,9 +5,16 @@ import {
   setCookie,
 } from "cookies-next";
 import { OptionsType } from "cookies-next/lib/types";
-import { NextApiRequest, NextPageContext } from "next";
+import { IncomingMessage, ServerResponse } from "http";
+import { NextApiRequest, NextApiResponse, NextPageContext } from "next";
 import { Debug } from "./Debug";
 import { IClientOptions } from "./IClientOptions";
+
+type GraphInit = {
+  config: IClientOptions;
+  req: NextApiRequest | IncomingMessage | undefined;
+  res: NextApiResponse | ServerResponse | undefined;
+};
 
 class GraphRequest {
   /** Access token to send with headers */
@@ -34,17 +41,8 @@ class GraphRequest {
    * @param context
    * @returns A class, GraphRequest, which holds the methods to make API requests.
    */
-  static async init(
-    config: IClientOptions,
-    context: NextPageContext | NextApiRequest,
-    req: NextApiRequest | undefined
-  ): Promise<GraphRequest> {
+  static async init({ config, req, res }: GraphInit): Promise<GraphRequest> {
     try {
-      if (context as NextApiRequest) {
-        console.log("It's from the API");
-        return new GraphRequest(config, "");
-      }
-
       const cookieOptions: OptionsType = {
         req,
         res,
@@ -52,6 +50,8 @@ class GraphRequest {
         sameSite: "lax",
       };
       const tokenExists = hasCookie("token", cookieOptions);
+      config["req"] = req;
+      config["res"] = res;
 
       // Return instance without requesting new access token to prevent unnecessary requests
       if (tokenExists)
@@ -142,6 +142,50 @@ class GraphRequest {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  async executePageRequest(shouldReturnProps?: boolean) {
+    this.constructUrl();
+    if (!this.#token) return;
+    if (!this.#requestUrl) return;
+
+    console.log(Object.keys(this.config.req));
+    // try {
+    //   const graphRequest = await fetch(this.#requestUrl, {
+    //     method: "POST",
+    //     body: this.config
+    //     headers: {
+    //       Authorization: `Bearer ${this.#token}`,
+    //     },
+    //   });
+    //   const graphResponse = await graphRequest.json();
+    //   const debugOutput = {
+    //     url: this.#requestUrl,
+    //     debugSrc: "lib/GraphRequest.ts",
+    //     shouldDebug: false,
+    //   };
+
+    //   let returnedResponse: any = {
+    //     ...graphResponse,
+    //     debugOutput,
+    //   };
+
+    //   if (shouldReturnProps) {
+    //     returnedResponse = {
+    //       props: {
+    //         ...graphResponse,
+    //         debugOutput,
+    //       },
+    //     };
+    //   }
+
+    //   const debug = Debug.init(debugOutput);
+    //   debug.printDebugOutput();
+
+    //   return returnedResponse;
+    // } catch (e) {
+    //   console.error(e);
+    // }
   }
 
   /**

@@ -1,6 +1,14 @@
-import { NextApiRequest, NextPageContext } from "next";
+import { IncomingMessage, ServerResponse } from "http";
+import { NextApiRequest, NextApiResponse, NextPageContext } from "next";
 import { GraphRequest } from "./GraphRequest";
 import { IClientOptions } from "./IClientOptions";
+
+type ApiConfig = {
+  context?: NextPageContext | undefined;
+  resource?: string;
+  apiRes?: NextApiResponse | undefined;
+  apiReq?: NextApiRequest | undefined;
+};
 
 class AuthenticationClient {
   /** Configuration to initialize the client with */
@@ -25,10 +33,7 @@ class AuthenticationClient {
     return new AuthenticationClient(options);
   }
 
-  public async api(
-    context: NextPageContext | NextApiRequest,
-    resource?: string
-  ) {
+  public async api({ context, resource = "", apiRes, apiReq }: ApiConfig) {
     if (resource) {
       this.config = {
         ...this.config,
@@ -36,7 +41,24 @@ class AuthenticationClient {
       };
     }
 
-    return await GraphRequest.init(this.config, context);
+    let response: ServerResponse | NextApiResponse | undefined = undefined;
+    let request: IncomingMessage | NextApiRequest | undefined = undefined;
+
+    if (context) {
+      response = context.res;
+      request = context.req;
+    }
+
+    if (apiRes && apiReq) {
+      response = apiRes;
+      request = apiReq;
+    }
+
+    return await GraphRequest.init({
+      config: this.config,
+      req: request,
+      res: response,
+    });
   }
 }
 

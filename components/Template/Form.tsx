@@ -30,7 +30,7 @@ function TemplateForm(props: TemplateFormProps) {
 
     if (headers.length === 0) setHeaders(activeCookie["headers"]);
     if (rows.length === 0) setRows(activeCookie["rows"]);
-  }, [activeCookie]);
+  }, [activeCookie, headers.length, rows.length]);
 
   const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
     const headerInputValue = event.target.value;

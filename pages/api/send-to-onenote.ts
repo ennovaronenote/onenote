@@ -15,6 +15,11 @@ export default async function sendToOneNote(
   if (!parsed) return res.status(400).json({});
 
   const client = AuthenticationClient.init(AUTH_CONFIG);
-  const request = await client.api(req);
+  const request = await client.api({
+    apiReq: req,
+    apiRes: res,
+    resource: "onenote/notebooks",
+  });
+  request.executePageRequest();
   res.status(200).json({});
 }
