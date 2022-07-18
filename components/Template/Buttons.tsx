@@ -3,7 +3,7 @@ import TemplateButton from "./Button";
 
 type TemplateButtonsProps = {
   handleSubmit: MouseEventHandler<HTMLButtonElement>;
-  sendTableToGraph: MouseEventHandler<HTMLButtonElement>;
+  sendTable: MouseEventHandler<HTMLButtonElement>;
 };
 
 /**
@@ -15,7 +15,7 @@ function TemplateButtons(props: TemplateButtonsProps) {
       <div className="flex flex-col items-center lg:flex-row lg:justify-center">
         <TemplateButton
           name="Add Header to Preview"
-          handleSubmit={props.handleSubmit}
+          onClick={props.handleSubmit}
           className="w-52"
         />
         <TemplateButton name="Clear" className="w-52 bg-red-400" />
@@ -25,7 +25,7 @@ function TemplateButtons(props: TemplateButtonsProps) {
         <TemplateButton
           name="Send Table to OneNote"
           className="w-56 m-0"
-          handleSubmit={props.sendTableToGraph}
+          onClick={props.sendTable}
         />
       </div>
     </>

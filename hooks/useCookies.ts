@@ -5,7 +5,7 @@ import { CookieSerializeOptions } from "next/dist/server/web/types";
 const useCookies = (cookieName: string) => {
   const [activeCookie, setActiveCookie] = useState<any>({});
 
-  const setData = (cookieData: any) => {
+  const setCookieData = (cookieData: any) => {
     try {
       const options: CookieSerializeOptions = { sameSite: "lax" };
       const newCookie = serialize(
@@ -15,7 +15,7 @@ const useCookies = (cookieName: string) => {
       );
 
       document.cookie = newCookie;
-      if (!cookieData || !cookieData["id"]) return;
+      if (!cookieData) return;
       setActiveCookie(cookieData);
     } catch (e) {
       console.error(`Error setting new cookie ${e}`);
@@ -53,7 +53,7 @@ const useCookies = (cookieName: string) => {
   return {
     activeCookie,
     getCookieByKey,
-    setData,
+    setCookieData,
   };
 };
 

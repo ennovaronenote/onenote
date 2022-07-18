@@ -3,6 +3,7 @@ import TemplateInput from "./Input";
 
 type TemplateInputsProps = {
   modifyHeader: ChangeEventHandler<HTMLInputElement>;
+  handleEnterKey: any;
   header: string;
 };
 
@@ -19,6 +20,7 @@ function TemplateInputs(props: TemplateInputsProps) {
         value={props.header}
         modifyHeader={props.modifyHeader}
         shouldFocus={true}
+        handleEnterKey={props.handleEnterKey}
       />
     </div>
   );

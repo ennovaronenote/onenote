@@ -14,7 +14,9 @@ type ResourceMainProps = {
  * @group Components
  */
 function ResourceMain(props: ResourceMainProps) {
-  const { setData, getCookieByKey, activeCookie } = useCookies(props.cookieKey);
+  const { setCookieData, getCookieByKey, activeCookie } = useCookies(
+    props.cookieKey
+  );
   const { parseData } = useTableData();
   const [currentSelection, setCurrentSelection] = useState<JSX.Element>();
 
@@ -32,7 +34,9 @@ function ResourceMain(props: ResourceMainProps) {
     <div
       className="container mx-auto"
       onClick={() => {
-        return setData(getCookieByKey(props.tableCookieKey || "notebook"));
+        return setCookieData(
+          getCookieByKey(props.tableCookieKey || "notebook")
+        );
       }}
     >
       <div className="text-center italic text-sm pb-3">

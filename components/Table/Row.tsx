@@ -11,12 +11,12 @@ type TableRowProps = {
  */
 function TableRow(props: TableRowProps) {
   const { row, customDataType = props.row.dataType } = props;
-  const { setData } = useCookies(customDataType);
+  const { setCookieData } = useCookies(customDataType);
 
   return (
     <div
       className="table-row odd:bg-blue-500 odd:text-white even:text-blue-500"
-      onClick={() => setData(row)}
+      onClick={() => setCookieData(row)}
     >
       {Object.entries(row).map((cellData: any) => {
         const cellKey = `${row.id}_${cellData}`;

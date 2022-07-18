@@ -144,50 +144,6 @@ class GraphRequest {
     }
   }
 
-  async executePageRequest(shouldReturnProps?: boolean) {
-    this.constructUrl();
-    if (!this.#token) return;
-    if (!this.#requestUrl) return;
-
-    console.log(Object.keys(this.config.req));
-    // try {
-    //   const graphRequest = await fetch(this.#requestUrl, {
-    //     method: "POST",
-    //     body: this.config
-    //     headers: {
-    //       Authorization: `Bearer ${this.#token}`,
-    //     },
-    //   });
-    //   const graphResponse = await graphRequest.json();
-    //   const debugOutput = {
-    //     url: this.#requestUrl,
-    //     debugSrc: "lib/GraphRequest.ts",
-    //     shouldDebug: false,
-    //   };
-
-    //   let returnedResponse: any = {
-    //     ...graphResponse,
-    //     debugOutput,
-    //   };
-
-    //   if (shouldReturnProps) {
-    //     returnedResponse = {
-    //       props: {
-    //         ...graphResponse,
-    //         debugOutput,
-    //       },
-    //     };
-    //   }
-
-    //   const debug = Debug.init(debugOutput);
-    //   debug.printDebugOutput();
-
-    //   return returnedResponse;
-    // } catch (e) {
-    //   console.error(e);
-    // }
-  }
-
   /**
    * Construct a url that combines a proper link to request a Microsoft Graph resource.
    * @private
