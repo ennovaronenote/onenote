@@ -12,8 +12,8 @@ import { IClientOptions } from "./IClientOptions";
 
 type GraphInit = {
   config: IClientOptions;
-  req: NextApiRequest | IncomingMessage | undefined;
-  res: NextApiResponse | ServerResponse | undefined;
+  req: any;
+  res: any;
 };
 
 class GraphRequest {
@@ -50,8 +50,6 @@ class GraphRequest {
         sameSite: "lax",
       };
       const tokenExists = hasCookie("token", cookieOptions);
-      config["req"] = req;
-      config["res"] = res;
 
       // Return instance without requesting new access token to prevent unnecessary requests
       if (tokenExists)
@@ -103,22 +101,40 @@ class GraphRequest {
    * Public function for user to complete their API request after receiving the proper access tokens.
    * @returns Data returned from Microsoft Graph
    */
-  async executeRequest(shouldReturnProps?: boolean) {
+  async executeRequest({
+    body = JSON.stringify({}),
+    shouldReturnProps = false,
+    method = "GET",
+    contentType = "application/json",
+  }) {
     this.constructUrl();
     if (!this.#token) return;
     if (!this.#requestUrl) return;
 
     try {
-      const graphRequest = await fetch(this.#requestUrl, {
+      const graphRequestOptions: any = {
+        method,
         headers: {
           Authorization: `Bearer ${this.#token}`,
+          "Content-Type": contentType,
         },
-      });
+      };
+
+      if (method !== "GET") graphRequestOptions["body"] = body;
+
+      const graphRequest = await fetch(this.#requestUrl, graphRequestOptions);
       const graphResponse = await graphRequest.json();
+
+      // DEBUG
       const debugOutput = {
         url: this.#requestUrl,
         debugSrc: "lib/GraphRequest.ts",
+        body,
+        method,
+        contentType,
         shouldDebug: false,
+        request: JSON.stringify(graphRequest),
+        response: JSON.stringify(graphResponse),
       };
 
       let returnedResponse: any = {

@@ -2,9 +2,10 @@ import { ChangeEventHandler } from "react";
 import TemplateInput from "./Input";
 
 type TemplateInputsProps = {
-  modifyHeader: ChangeEventHandler<HTMLInputElement>;
+  [key: string]: ChangeEventHandler<HTMLInputElement> | any | string;
   handleEnterKey: any;
   header: string;
+  templateName: string;
 };
 
 /**
@@ -20,6 +21,16 @@ function TemplateInputs(props: TemplateInputsProps) {
         value={props.header}
         modifyHeader={props.modifyHeader}
         shouldFocus={true}
+        handleEnterKey={props.handleEnterKey}
+      />
+
+      <TemplateInput
+        type="text"
+        placeholder="Template Name"
+        inputName="header"
+        value={props.templateName}
+        modifyTemplateName={props.modifyTemplateName}
+        shouldFocus={false}
         handleEnterKey={props.handleEnterKey}
       />
     </div>

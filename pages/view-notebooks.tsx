@@ -37,7 +37,9 @@ export async function getServerSideProps(context: NextPageContext) {
     resource: "onenote/notebooks",
   });
   const request = await client.api({ context });
-  const response = await request.executeRequest(true);
+  const response = await request.executeRequest({
+    shouldReturnProps: true,
+  });
 
   return response;
 }

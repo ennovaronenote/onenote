@@ -1,10 +1,10 @@
 import { ChangeEventHandler } from "react";
 
 type TemplateInputProps = {
+  [key: string]: ChangeEventHandler<HTMLInputElement> | string | boolean | any;
   type: string;
   placeholder: string;
   inputName: string;
-  modifyHeader: ChangeEventHandler<HTMLInputElement>;
   handleEnterKey: any;
   value: string;
   label?: string;
@@ -25,7 +25,7 @@ function TemplateInput(props: TemplateInputProps) {
           type={props.type}
           placeholder={props.placeholder}
           name={props.inputName}
-          onChange={props.modifyHeader}
+          onChange={props.modifyHeader || props.modifyTemplateName}
           onKeyDown={props.handleEnterKey}
           value={props.value}
           autoFocus={shouldFocus}

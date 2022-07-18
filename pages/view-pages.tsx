@@ -69,8 +69,10 @@ export async function getServerSideProps(context: NextPageContext) {
     ...AUTH_CONFIG,
     resource: `onenote/sections/${sectionId}/pages`,
   });
-  const request = await client.api(context);
-  const response = await request.executeRequest(true);
+  const request = await client.api({ context });
+  const response = await request.executeRequest({
+    shouldReturnProps: true,
+  });
 
   if (response.value) return response.value;
   return response;

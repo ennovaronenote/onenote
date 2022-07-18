@@ -6,6 +6,7 @@ import TemplatePreviewContainer from "./Preview/Container";
 import retrieveCurrentTemplate, {
   updateCurrentTemplate,
 } from "../../lib/retrieveCurrentTemplate";
+import { parseOneNoteRequest } from "../../lib/parsing";
 
 /**
  * @group Components
@@ -13,13 +14,17 @@ import retrieveCurrentTemplate, {
 function TemplateForm() {
   const { activeCookie, setCookieData } = useCookies("template");
   const [header, setHeader] = useState<string>("");
+  const [templateName, setTemplateName] = useState<string>("");
+  const [creatingPage, setCreatingPage] = useState<boolean>(false);
 
-  const modifyHeader = (
-    event: ChangeEvent<HTMLInputElement>,
-    enterPressed?: boolean
-  ) => {
+  const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
     const headerInputValue = event.target.value;
     setHeader(headerInputValue);
+  };
+
+  const modifyTemplateName = (event: ChangeEvent<HTMLInputElement>) => {
+    const templateInputValue = event.target.value;
+    setTemplateName(templateInputValue);
   };
 
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
@@ -27,10 +32,18 @@ function TemplateForm() {
 
     const { headers, rows } = updateCurrentTemplate(header);
     setHeader("");
+    setTemplateName("");
     setCookieData({
       headers,
       rows,
     });
+  };
+
+  const handleClear = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    setHeader("");
+    setTemplateName("");
   };
 
   const handleEnterKey = (event: any) => {
@@ -38,8 +51,26 @@ function TemplateForm() {
     handleSubmit(event);
   };
 
-  const sendTable = (event: MouseEvent<HTMLButtonElement>) => {
+  const sendTable = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+
+    const { headers = [], rows = [[]] } = activeCookie;
+    const parsed = parseOneNoteRequest(headers, rows, templateName);
+
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/html",
+      },
+      body: parsed,
+    };
+
+    setCreatingPage(true);
+    const createPage = await fetch(
+      "http://localhost:3000/api/create-page",
+      fetchOptions
+    );
+    setCreatingPage(false);
   };
 
   return (
@@ -51,10 +82,17 @@ function TemplateForm() {
 
         <TemplateInputs
           modifyHeader={modifyHeader}
+          modifyTemplateName={modifyTemplateName}
           header={header}
+          templateName={templateName}
           handleEnterKey={handleEnterKey}
         />
-        <TemplateButtons handleSubmit={handleSubmit} sendTable={sendTable} />
+        <TemplateButtons
+          handleSubmit={handleSubmit}
+          handleClear={handleClear}
+          sendTable={sendTable}
+          creatingPage={creatingPage}
+        />
       </div>
     </>
   );

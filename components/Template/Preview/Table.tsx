@@ -22,7 +22,7 @@ function TemplatePreviewTable(props: TemplatePreviewTableProps) {
     <>
       <TableContainer
         headers={headers}
-        rows={[rows]}
+        rows={rows}
         customDataType="previewRows"
       />
     </>

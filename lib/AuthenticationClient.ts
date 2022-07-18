@@ -3,7 +3,7 @@ import { GraphRequest } from "./GraphRequest";
 import { IClientOptions } from "./IClientOptions";
 
 type ApiConfig = {
-  context?: NextPageContext | undefined;
+  context?: any;
   resource?: string;
 };
 
@@ -38,10 +38,12 @@ class AuthenticationClient {
       };
     }
 
+    const { req, res } = context;
+
     return await GraphRequest.init({
       config: this.config,
-      req: context?.req,
-      res: context?.res,
+      req,
+      res,
     });
   }
 }
