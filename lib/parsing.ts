@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import { parse } from "node-html-parser";
 
 export const parseOneNoteRequest = (
   headers: any[],
@@ -14,7 +14,9 @@ export const parseOneNoteRequest = (
 
   headers.map((header: string) => {
     const headerRowContent = document.createElement("th");
-    headerRowContent.innerText = header;
+    const headerSpan = document.createElement("span");
+    headerSpan.innerText = header;
+    headerRowContent.appendChild(headerSpan);
     headerRow.appendChild(headerRowContent);
   });
 
@@ -42,26 +44,26 @@ export const parseOneNoteRequest = (
   );
   element.body.insertAdjacentHTML("beforeend", table.outerHTML);
 
-  return element.documentElement.outerHTML;
+  return element.documentElement;
 };
 
 export const parseOneNoteResponse = (page: any) => {
-  const parser = new DOMParser();
-  const parsed = parser.parseFromString(page, "text/html");
-  const tables = parsed.body.querySelector(`[data-id="trainingTable"]`);
+  const parsed = parse(page).removeWhitespace();
+  const tables = parsed.querySelector(`[data-id="trainingTable"]`);
   if (!tables) return;
 
-  let resHeaders = tables.querySelectorAll("span") || [];
-  let resRows = tables.querySelectorAll("tr") || [];
+  let resHeaders: any = tables.querySelectorAll("span") || [];
+  let resRows: any = tables.querySelectorAll("tr") || [];
 
   const newHeaders: string[] = [];
   const newRows: string[][] = [];
-  resHeaders.forEach((resHeader, index) => {
+
+  resHeaders.forEach((resHeader: any, index: number) => {
     newHeaders.push(resHeader.innerText);
   });
 
   for (let i = 0; i < resRows.length; ++i) {
-    const rowData = resRows[i].children;
+    const rowData = resRows[i].childNodes;
     const row: string[] = [];
     if (resRows[i].getAttribute("data-id") === "headers") continue;
     for (let j = 0; j < rowData.length; ++j) {

@@ -7,6 +7,7 @@ import retrieveCurrentTemplate, {
   updateCurrentTemplate,
 } from "../../lib/retrieveCurrentTemplate";
 import { parseOneNoteRequest, parseOneNoteResponse } from "../../lib/parsing";
+import { parse } from "node-html-parser";
 
 /**
  * @group Components
@@ -17,40 +18,44 @@ function TemplateForm(props: any) {
   const [templateName, setTemplateName] = useState<string>("");
   const [creatingPage, setCreatingPage] = useState<boolean>(false);
 
+  // Header acts as an individual header for a column in the table
   const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
     const headerInputValue = event.target.value;
     setHeader(headerInputValue);
   };
 
+  // Template name will act as a title of the page in OneNote
   const modifyTemplateName = (event: ChangeEvent<HTMLInputElement>) => {
     const templateInputValue = event.target.value;
     setTemplateName(templateInputValue);
   };
 
+  // Resets the input data and sets the cookie that includes the list of headers and rows
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     const { headers, rows } = updateCurrentTemplate(header);
-    setHeader("");
-    setTemplateName("");
+    handleClear(event);
     setCookieData({
       headers,
       rows,
     });
   };
 
+  // Clears only the header field so the app knows how to title the page
   const handleClear = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     setHeader("");
-    setTemplateName("");
   };
 
+  // Essentially an alias of handleSubmit
   const handleEnterKey = (event: any) => {
     if (event.key !== "Enter") return;
     handleSubmit(event);
   };
 
+  // Performs necessary parsing on the HTML so that the data can successfully be sent to OneNote
   const sendTable = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
@@ -62,20 +67,48 @@ function TemplateForm(props: any) {
       headers: {
         "Content-Type": "text/html",
       },
-      body: parsed,
+      body: parsed.outerHTML,
     };
+
+    if (props.title) {
+      console.log(parse(props.selectedPage).querySelector("table")?.outerHTML);
+      fetchOptions["headers"] = {
+        "Content-Type": "application/json",
+      };
+      fetchOptions["body"] = JSON.stringify({
+        html: parsed.outerHTML,
+        title: props.title,
+      });
+    }
 
     setCreatingPage(true);
     const createPage = await fetch(
-      "http://localhost:3000/api/create-page",
+      "http://localhost:3000/api/get-page-content",
       fetchOptions
     );
     setCreatingPage(false);
   };
 
+  // If there is a page selected, parse its HTML and set the cookie data accordingly.
   useEffect(() => {
     if (props.selectedPage) {
-      parseOneNoteResponse(props.selectedPage);
+      const parsed = parseOneNoteResponse(props.selectedPage) || {
+        headers: [],
+        rows: [],
+      };
+
+      const updatedOneNoteRequest = parseOneNoteRequest(
+        parsed.headers,
+        parsed.rows,
+        props.title
+      );
+
+      if (parsed.headers.length !== 0 && parsed.rows.length !== 0) {
+        setCookieData({
+          headers: parsed.headers,
+          rows: parsed.rows,
+        });
+      }
     }
   }, [props]);
 

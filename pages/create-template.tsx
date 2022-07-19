@@ -10,7 +10,7 @@ import { AUTH_CONFIG } from "../lib/Constants";
 function CreateTemplate(props: any) {
   return (
     <div className="container mx-auto">
-      <TemplateForm selectedPage={props.html} />
+      <TemplateForm selectedPage={props.html} title={props.title} />
     </div>
   );
 }
@@ -30,12 +30,14 @@ export async function getServerSideProps(context: any) {
       contentType: "text/html",
     });
 
-    const parsed = parse(response.props.htmlContent).removeWhitespace()
-      .outerHTML;
+    const parsed = parse(response.props.htmlContent).removeWhitespace();
+    const output = parsed.outerHTML;
 
+    const title = parsed.querySelector("title")?.textContent || "";
     return {
       props: {
-        html: parsed.toString(),
+        html: output.toString(),
+        title,
       },
     };
   } catch (e) {
@@ -49,5 +51,4 @@ export async function getServerSideProps(context: any) {
       props: error,
     };
   }
-  return { props: {} };
 }

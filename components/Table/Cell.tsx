@@ -18,9 +18,9 @@ function TableCell({ text, cellType }: TableCellProps) {
   useEffect(() => {
     if (cellType === "link") {
       setLinkContent(
-        <Link href={text.href}>
-          <a>{text.displayText}</a>
-        </Link>
+        <a href={text.href} target="_blank">
+          {text.displayText}
+        </a>
       );
       setCellContent(text.displayText);
     }
