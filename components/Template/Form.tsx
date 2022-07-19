@@ -62,28 +62,21 @@ function TemplateForm(props: any) {
     const { headers = [], rows = [[]] } = activeCookie;
     const parsed = parseOneNoteRequest(headers, rows, templateName);
 
+    const htmlOutput =
+      parsed.querySelector(`[data-id="trainingTable"]`)?.outerHTML ||
+      parsed.outerHTML;
+
     const fetchOptions = {
       method: "POST",
       headers: {
         "Content-Type": "text/html",
       },
-      body: parsed.outerHTML,
+      body: htmlOutput,
     };
-
-    if (props.title) {
-      console.log(parse(props.selectedPage).querySelector("table")?.outerHTML);
-      fetchOptions["headers"] = {
-        "Content-Type": "application/json",
-      };
-      fetchOptions["body"] = JSON.stringify({
-        html: parsed.outerHTML,
-        title: props.title,
-      });
-    }
 
     setCreatingPage(true);
     const createPage = await fetch(
-      "http://localhost:3000/api/get-page-content",
+      "http://localhost:3000/api/create-page",
       fetchOptions
     );
     setCreatingPage(false);
@@ -96,12 +89,6 @@ function TemplateForm(props: any) {
         headers: [],
         rows: [],
       };
-
-      const updatedOneNoteRequest = parseOneNoteRequest(
-        parsed.headers,
-        parsed.rows,
-        props.title
-      );
 
       if (parsed.headers.length !== 0 && parsed.rows.length !== 0) {
         setCookieData({
