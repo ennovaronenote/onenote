@@ -102,10 +102,13 @@ class GraphRequest {
    * @returns Data returned from Microsoft Graph
    */
   async executeRequest({
-    body = JSON.stringify({}),
+    body = {},
     shouldReturnProps = false,
     method = "GET",
     contentType = "application/json",
+    shouldReturnHtml = false,
+  }: {
+    [key: string]: any;
   }) {
     this.constructUrl();
     if (!this.#token) return;
@@ -123,11 +126,17 @@ class GraphRequest {
       if (method !== "GET") graphRequestOptions["body"] = body;
 
       const graphRequest = await fetch(this.#requestUrl, graphRequestOptions);
-      const graphResponse =
-        contentType === "application/json"
-          ? await graphRequest.json()
-          : await graphRequest.text();
 
+      const getRequestHeaders = graphRequest.headers.get("Content-Type");
+      const returnHtml = getRequestHeaders?.includes("text/html");
+
+      async function getResponse() {
+        return returnHtml || shouldReturnHtml
+          ? await graphRequest.text()
+          : await graphRequest.json();
+      }
+
+      const graphResponse = await getResponse();
       // DEBUG
       const debugOutput = {
         url: this.#requestUrl,
@@ -142,7 +151,6 @@ class GraphRequest {
 
       let returnedResponse: any = {
         ...graphResponse,
-        debugOutput,
       };
 
       if (typeof graphResponse === "string") {
@@ -157,7 +165,6 @@ class GraphRequest {
         returnedResponse = {
           props: {
             ...graphResponse,
-            debugOutput,
           },
         };
       }
@@ -167,7 +174,7 @@ class GraphRequest {
 
       return returnedResponse;
     } catch (e) {
-      console.error(e);
+      console.error(`GraphRequest error when at: ${this.#requestUrl}`);
     }
   }
 

@@ -3,6 +3,7 @@ import { AuthenticationClient } from "../../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../../lib/Constants";
 import { parse } from "node-html-parser";
 import { parseOneNoteResponse } from "../../lib/parsing";
+import { setCookie } from "cookies-next";
 
 export default async function createPage(
   req: NextApiRequest,
@@ -20,40 +21,56 @@ export default async function createPage(
     const parsedPage = JSON.parse(parsedCookies.page || "");
     section.id = parsedSection.id || undefined;
     page.id = parsedPage.id || undefined;
+    page.title = parsedPage.displayName || undefined;
   } catch (e) {
     console.error(e);
   }
 
   const requestConfig = {
     context: { req, res },
-    resource: `onenote/sections/${section.id}/pages`,
+    resource: `onenote/pages/${page.id}/content?includeIDs=true`,
   };
 
   const executeRequestConfig = {
-    method: "GET",
-    contentType: "text/html",
+    method: "PATCH",
+    contentType: "application/json",
+    body: JSON.stringify(req.body),
+    shouldReturnHtml: true,
   };
 
-  if (req.body.title) {
-    requestConfig[
-      "resource"
-    ] = `onenote/pages/${page.id}/content?includeIDs=true`;
+  if (req.body.html) {
+    requestConfig["resource"] = `onenote/sections/${section.id}/pages`;
+    executeRequestConfig["method"] = "POST";
+    executeRequestConfig["contentType"] = "text/html";
+    executeRequestConfig["body"] = req.body.html;
+    executeRequestConfig["shouldReturnHtml"] = false;
   }
 
   const request = await client.api(requestConfig);
   const pageContent = await request.executeRequest(executeRequestConfig);
-  const parsedPageContent = parseOneNoteResponse(pageContent.props.htmlContent);
 
-  console.log(parse("<html></html>"));
-
-  if (page.id) {
-    const html = parse(req.body.html);
-    executeRequestConfig["method"] = "PATCH";
-    executeRequestConfig["contentType"] = "application/json";
-
-    const table = html.querySelector(`[data-id="trainingTable"]`);
-    //const parsie = parseOneNoteResponse(html);
+  if (pageContent.contentUrl) {
+    requestConfig["resource"] = `${pageContent.contentUrl}?includeIDs=true`;
   }
+
+  if (!pageContent.htmlContent) {
+    const newPageContentConfig = {
+      method: "GET",
+      contentType: "text/html",
+      shouldReturnHtml: true,
+      shouldReturnProps: false,
+    };
+
+    const newPageRequest = await client.api(requestConfig);
+    const newPageContent = await newPageRequest.executeRequest(
+      newPageContentConfig
+    );
+    const parseNewPage = parseOneNoteResponse(newPageContent.props.htmlContent);
+
+    return res.status(200).json(parseNewPage);
+  }
+
+  return res.status(200).json(pageContent);
 
   // const response = await request.executeRequest({
   //   body: req.body,

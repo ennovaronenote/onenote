@@ -3,10 +3,12 @@ import { parse } from "node-html-parser";
 export const parseOneNoteRequest = (
   headers: any[],
   rows: any[][],
+  tableId?: string,
   title?: string
 ) => {
   const table = document.createElement("table");
   table.setAttribute("data-id", "trainingTable");
+  table.setAttribute("id", tableId || "none");
   const tableHeaders = document.createElement("thead");
   const tableBody = document.createElement("tbody");
   const headerRow = document.createElement("tr");
@@ -74,6 +76,7 @@ export const parseOneNoteResponse = (page: any) => {
   }
 
   return {
+    id: tables.getAttribute("id"),
     headers: newHeaders,
     rows: newRows,
   };

@@ -22,18 +22,19 @@ export async function getServerSideProps(context: any) {
     const client = AuthenticationClient.init(AUTH_CONFIG);
     const request = await client.api({
       context,
-      resource: `onenote/pages/${page.id}/content`,
+      resource: `onenote/pages/${page.id}/content?includeIDs=true`,
     });
 
     const response = await request.executeRequest({
       shouldReturnProps: true,
       contentType: "text/html",
+      shouldReturnHtml: true,
     });
 
     const parsed = parse(response.props.htmlContent).removeWhitespace();
     const output = parsed.outerHTML;
-
     const title = parsed.querySelector("title")?.textContent || "";
+
     return {
       props: {
         html: output.toString(),
