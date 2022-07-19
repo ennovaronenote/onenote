@@ -6,12 +6,12 @@ import TemplatePreviewContainer from "./Preview/Container";
 import retrieveCurrentTemplate, {
   updateCurrentTemplate,
 } from "../../lib/retrieveCurrentTemplate";
-import { parseOneNoteRequest } from "../../lib/parsing";
+import { parseOneNoteRequest, parseOneNoteResponse } from "../../lib/parsing";
 
 /**
  * @group Components
  */
-function TemplateForm() {
+function TemplateForm(props: any) {
   const { activeCookie, setCookieData } = useCookies("template");
   const [header, setHeader] = useState<string>("");
   const [templateName, setTemplateName] = useState<string>("");
@@ -73,6 +73,13 @@ function TemplateForm() {
     setCreatingPage(false);
   };
 
+  useEffect(() => {
+    if (props.selectedPage) {
+      parseOneNoteResponse(props.selectedPage);
+    }
+  }, [props]);
+
+  // Actual JSX returned
   return (
     <>
       <TemplatePreviewContainer activeCookie={activeCookie} />

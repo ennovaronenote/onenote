@@ -56,7 +56,7 @@ function useResponse(options: HandleResponseProps) {
       selectedData,
       error,
       pageProps,
-      shouldDebug: true,
+      shouldDebug: false,
     });
     debug.printDebugOutput();
 

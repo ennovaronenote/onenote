@@ -123,7 +123,10 @@ class GraphRequest {
       if (method !== "GET") graphRequestOptions["body"] = body;
 
       const graphRequest = await fetch(this.#requestUrl, graphRequestOptions);
-      const graphResponse = await graphRequest.json();
+      const graphResponse =
+        contentType === "application/json"
+          ? await graphRequest.json()
+          : await graphRequest.text();
 
       // DEBUG
       const debugOutput = {
@@ -141,6 +144,14 @@ class GraphRequest {
         ...graphResponse,
         debugOutput,
       };
+
+      if (typeof graphResponse === "string") {
+        return {
+          props: {
+            htmlContent: graphResponse.toString(),
+          },
+        };
+      }
 
       if (shouldReturnProps) {
         returnedResponse = {
