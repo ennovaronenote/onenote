@@ -15,6 +15,7 @@ function TemplateForm(props: any) {
   const [header, setHeader] = useState<string>("");
   const [templateName, setTemplateName] = useState<string>("");
   const [creatingPage, setCreatingPage] = useState<boolean>(false);
+  const [rowData, setRowData] = useState<string>("");
 
   // Header acts as an individual header for a column in the table
   const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
@@ -28,12 +29,21 @@ function TemplateForm(props: any) {
     setTemplateName(templateInputValue);
   };
 
+  const modifyRowData = (event: ChangeEvent<HTMLInputElement>) => {
+    const rowInputValue = event.target.value;
+    setRowData(rowInputValue);
+  };
+
   // Resets the input data and sets the cookie that includes the list of headers and rows
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    const { headers, rows } = updateCurrentTemplate(header);
-    handleClear(event);
+    const { headers = [], rows = [] } = updateCurrentTemplate(
+      header,
+      rowData || undefined
+    );
+    setHeader("");
+    setRowData("");
     setCookieData({
       tableId: activeCookie.tableId,
       headers,
@@ -46,6 +56,12 @@ function TemplateForm(props: any) {
     event.preventDefault();
 
     setHeader("");
+    setRowData("");
+    setCookieData({
+      tableId: activeCookie.tableId,
+      headers: [],
+      rows: [],
+    });
   };
 
   // Essentially an alias of handleSubmit
@@ -98,13 +114,13 @@ function TemplateForm(props: any) {
 
     setCreatingPage(true);
     const createPage = await fetch(
-      "https://developercaleb.com/api/create-page",
+      "http://localhost:3000/api/create-page",
       fetchBody["content"]
     );
     const createPageResponse = await createPage.json();
     const error = createPageResponse.error;
 
-    if (error) console.log(error);
+    if (error) console.log(`Error ${JSON.stringify(error)}`);
 
     setCookieData({
       tableId: createPageResponse.id,
@@ -139,7 +155,10 @@ function TemplateForm(props: any) {
   // Actual JSX returned
   return (
     <>
-      <TemplatePreviewContainer activeCookie={activeCookie} />
+      <TemplatePreviewContainer
+        templateName={templateName}
+        activeCookie={activeCookie}
+      />
 
       <div className="w-3/4 mx-auto my-5 pb-10 bg-blue-500/75 border border-violet-500 text-center text-white">
         <div className="prose-2xl text-white py-5">Template Creation</div>
@@ -147,6 +166,8 @@ function TemplateForm(props: any) {
         <TemplateInputs
           modifyHeader={modifyHeader}
           modifyTemplateName={modifyTemplateName}
+          modifyRowData={modifyRowData}
+          rowData={rowData}
           header={header}
           templateName={templateName}
           handleEnterKey={handleEnterKey}

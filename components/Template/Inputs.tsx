@@ -26,6 +26,16 @@ function TemplateInputs(props: TemplateInputsProps) {
 
       <TemplateInput
         type="text"
+        placeholder="Row Data"
+        inputName="rowData"
+        value={props.rowData}
+        modifyHeader={props.modifyRowData}
+        shouldFocus={false}
+        handleEnterKey={props.handleEnterKey}
+      />
+
+      <TemplateInput
+        type="text"
         placeholder="Template Name"
         inputName="header"
         value={props.templateName}
