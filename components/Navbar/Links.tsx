@@ -10,7 +10,7 @@ import NavbarLink from "./Link";
  */
 function NavbarLinks() {
   return (
-    <div className="container mx-auto flex flex-row justify-around">
+    <div className="container mx-auto flex flex-col items-center lg:flex-row lg:justify-around">
       <NavbarLink href="/" value="Home" />
       <NavbarLink href="/view-notebooks" value="View Notebooks" />
       <NavbarLink href="/view-sections" value="View Sections" />
