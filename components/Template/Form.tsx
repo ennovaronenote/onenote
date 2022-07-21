@@ -160,7 +160,7 @@ function TemplateForm(props: any) {
         activeCookie={activeCookie}
       />
 
-      <div className="w-3/4 mx-auto my-5 pb-10 bg-blue-500/75 border border-violet-500 text-center text-white">
+      <div className="w-3/4 mx-auto my-5 pb-10 bg-blue-500/75 border border-violet-500 text-center text-white lg:w-1/2">
         <div className="prose-2xl text-white py-5">Template Creation</div>
 
         <TemplateInputs

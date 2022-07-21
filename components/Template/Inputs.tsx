@@ -13,7 +13,7 @@ type TemplateInputsProps = {
  */
 function TemplateInputs(props: TemplateInputsProps) {
   return (
-    <div>
+    <div className="">
       <TemplateInput
         type="text"
         placeholder="Header"

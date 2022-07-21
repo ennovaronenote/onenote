@@ -20,15 +20,18 @@ function TemplateButtons(
         <TemplateButton
           name="Add Header to Preview"
           onClick={props.handleSubmit}
-          className="w-52"
+          className="hover:border-red-500 hover:border !lg:w-52"
         />
 
         {props.creatingPage ? (
-          <TemplateButton name="Creating page now" className="w-52" />
+          <TemplateButton
+            name="Creating page now"
+            className="hover:border-red-500 hover:border !lg:w-52"
+          />
         ) : (
           <TemplateButton
             name="Send Table to OneNote"
-            className="w-52"
+            className="hover:border-red-500 hover:border !lg:w-56"
             onClick={props.sendTable}
           />
         )}
@@ -37,7 +40,7 @@ function TemplateButtons(
       <div className="flex justify-center">
         <TemplateButton
           name="Clear"
-          className="w-56 m-0 bg-red-400"
+          className="!lg:w-56 bg-red-500 hover:border-violet-500/75 hover:border-2"
           onClick={props.handleClear}
         />
       </div>

@@ -13,7 +13,7 @@ type TemplateButtonProps = {
 function TemplateButton(props: TemplateButtonProps) {
   return (
     <button
-      className={`w-28 bg-violet-500 rounded-full text-center mx-3 my-5 p-3 font-sans font-semibold ${props.className}`}
+      className={`w-1/2 bg-violet-500 rounded-full text-center mx-3 my-5 p-3 font-sans font-semibold lg:w-52 ${props.className}`}
       onClick={
         props.onClick
           ? props.onClick

@@ -31,7 +31,7 @@ function TemplateInput(props: TemplateInputProps) {
           onKeyDown={props.handleEnterKey}
           value={props.value}
           autoFocus={shouldFocus}
-          className="text-left text-neutral-700 border-2 border-violet-500 my-3 py-1 pl-3 focus:outline-none focus:border-violet-600 hover:border-violet-600"
+          className="text-left text-neutral-700 border-2 border-violet-500 my-3 px-5 py-1 focus:outline-none focus:border-violet-600 hover:border-violet-600"
         />
       </span>
     </div>
