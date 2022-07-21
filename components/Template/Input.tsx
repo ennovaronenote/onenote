@@ -9,19 +9,21 @@ type TemplateInputProps = {
   value: string;
   label?: string;
   shouldFocus: boolean;
+  required?: boolean;
 };
 
 /**
  * @group Components
  */
 function TemplateInput(props: TemplateInputProps) {
-  const { shouldFocus = false } = props;
+  const { shouldFocus = false, required = false } = props;
   return (
     <div className="appearance-none">
       <span>
         {props.label && <label htmlFor={props.inputName}>{props.label}</label>}
 
         <input
+          required={props.required}
           type={props.type}
           placeholder={props.placeholder}
           name={props.inputName}

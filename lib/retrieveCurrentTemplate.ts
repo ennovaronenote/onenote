@@ -38,23 +38,23 @@ export default function retrieveCurrentTemplate() {
   }
 }
 
-function generateNewRows(headers: string[]): string[] {
+function generateNewRows(headers: string[], row?: string): string[] {
   if (headers.length === 0) return [];
 
-  const newRows: string[] = headers.map(
-    (header: string) => `Sample row data (${header})`
-  );
-
+  const newRows: string[] = headers.map((header: string, index: number) => {
+    if (index === headers.length - 1 && row) return row;
+    return `Sample row data (${header})`;
+  });
   return newRows || [];
 }
 
-export function updateCurrentTemplate(header: string, row?: string[]) {
+export function updateCurrentTemplate(header: string, rowData?: string) {
   const { headers = [], rows = [], error } = retrieveCurrentTemplate();
   if (error) return { error };
   if (!header) return { error: true };
 
   const newHeaders = [...headers, header];
-  const newRows = row ? [...rows, row] : [generateNewRows(newHeaders)];
+  const newRows = [generateNewRows(newHeaders, rowData)];
 
   setCookie(
     "template",
