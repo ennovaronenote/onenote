@@ -60,6 +60,17 @@ export async function getServerSideProps(context: NextPageContext) {
   const parsedNotebook = validateCookie({ cookie: context, key: "notebook" });
   const notebookId = parsedNotebook.id;
 
+  // If no notebook is selected, redirect the user to select one.
+  if (!notebookId) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/view-notebooks",
+      },
+      props: {},
+    };
+  }
+
   const client = AuthenticationClient.init({
     ...AUTH_CONFIG,
     resource: `onenote/notebooks/${notebookId}/sections`,
@@ -70,6 +81,7 @@ export async function getServerSideProps(context: NextPageContext) {
   });
 
   if (response.value) return response.value;
+
   return response;
 }
 
