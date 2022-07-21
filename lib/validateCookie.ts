@@ -41,9 +41,16 @@ function validateCookie(context: RequestedCookie<any>) {
       };
     }
 
-    const parsedCookie = JSON.parse(cookies[context["key"]]);
-    return parsedCookie;
+    try {
+      const parsedCookie = JSON.parse(cookies[context["key"]]);
+      return parsedCookie;
+    } catch (e) {
+      console.error(`Error in validateCookie (${e})`);
+      return e;
+    }
   }
+
+  return { error: true };
 }
 
 export default validateCookie;
