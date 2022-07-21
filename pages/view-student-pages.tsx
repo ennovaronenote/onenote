@@ -89,7 +89,7 @@ export default function ViewStudentPages(props: any) {
           response.pagesUrl.indexOf("onenote")
         );
         const pageContent = await fetch(
-          `https://localhost:3000/api/get-all-pages?resource=${pageId}&userSelector=${student.userSelector}`
+          `https://developercaleb.com:3000/api/get-all-pages?resource=${pageId}&userSelector=${student.userSelector}`
         );
         const pageResponse = await pageContent.json();
 
