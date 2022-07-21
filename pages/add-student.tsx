@@ -19,7 +19,7 @@ export default function AddStudent(props: any) {
   return error ? (
     error
   ) : (
-    <div className="container w-3/4 mx-auto text-center">
+    <div className="container w-full mx-auto text-center lg:w-3/4">
       <StudentList students={props.students} templates={props.templates} />
     </div>
   );

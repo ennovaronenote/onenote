@@ -6,8 +6,8 @@ import Student from "./Student";
 import TemplateTitle from "./TemplateTitle";
 
 export default function StudentList(props: any) {
-	const { students = [], templates = [] } = props;  
-const { activeCookie, setCookieData, getCookieByKey } = useCookies("page");
+  const { students = [], templates = [] } = props;
+  const { activeCookie, setCookieData, getCookieByKey } = useCookies("page");
   const [selections, setSelections] = useState<any>({
     student: {},
     template: {},
@@ -130,9 +130,11 @@ const { activeCookie, setCookieData, getCookieByKey } = useCookies("page");
   }, [students, templates]);
 
   return students.length === 0 || templates.length === 0 ? (
-    <div className="w-1/4 my-5 px-10 p-4 flex flex-col justify-center mx-auto rounded-xl border-2 border-violet-500/75">Please navigate to {'"'}View Pages{'"'} to populate templates.</div>
+    <div className="w-1/4 my-5 px-10 p-4 flex flex-col justify-center mx-auto rounded-xl border-2 border-violet-500/75">
+      Please navigate to {'"'}View Pages{'"'} to populate templates.
+    </div>
   ) : (
-    <div className="w-1/4 my-5 px-10 pt-3 flex flex-col justify-center mx-auto rounded-xl border-2 border-violet-500/75">
+    <div className="w-1/2 my-5 px-10 pt-3 flex flex-col justify-center mx-auto rounded-xl border-2 border-violet-500/75 xl:w-1/4 xl:px-1">
       <div className="text-left">Students</div>
       <select
         className="rounded-xl mx-5 my-3 p-2"

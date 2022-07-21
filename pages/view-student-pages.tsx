@@ -101,7 +101,7 @@ export default function ViewStudentPages(props: any) {
   }, [props]);
   return (
     <div className="container mx-auto w-3/4">
-      <div className="w-1/2 text-center mx-auto my-5">
+      <div className="w-3/4 text-center mx-auto my-5 lg:w-1/2">
         <div className="text-xl">Select a student</div>
         <select name="students" onChange={(e) => handleChange(e, "test")}>
           {props.students.map((student: any) => {
