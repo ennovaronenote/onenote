@@ -70,6 +70,13 @@ export default async function createPage(
     shouldReturnHtml: true,
   };
 
+  const request = await client.api(requestConfig);
+  const pageContent = await request.executeRequest(executeRequestConfig);
+
+  if (pageContent.contentUrl) {
+    requestConfig["resource"] = `${pageContent.contentUrl}?includeIDs=true`;
+  }
+
   if (req.body.html) {
     requestConfig["resource"] = `onenote/sections/${section.id}/pages`;
     executeRequestConfig["method"] = "POST";
@@ -78,14 +85,15 @@ export default async function createPage(
     executeRequestConfig["shouldReturnHtml"] = false;
   }
 
-  const request = await client.api(requestConfig);
-  const pageContent = await request.executeRequest(executeRequestConfig);
-
-  if (pageContent.contentUrl) {
-    requestConfig["resource"] = `${pageContent.contentUrl}?includeIDs=true`;
+  if (pageContent && req.query.pageId) {
+    return res.status(200).json({
+      success: true,
+      userSelector: requestConfig["userSelector"],
+      resource: requestConfig["resource"],
+    });
   }
 
-  if (!pageContent.htmlContent) {
+  if (!pageContent.htmlContent && !req.body.html) {
     const newPageContentConfig = {
       method: "GET",
       contentType: "text/html",
@@ -97,14 +105,72 @@ export default async function createPage(
     const newPageContent = await newPageRequest.executeRequest(
       newPageContentConfig
     );
+
     const parseNewPage = parseOneNoteResponse(newPageContent.props.htmlContent);
 
-    setCookie("page", JSON.stringify(parseNewPage), {
-      req,
-      res,
-      sameSite: "lax",
-    });
+    const indexOfPages = requestConfig.resource.indexOf("pages/");
+    let pageId = requestConfig.resource.substring(
+      indexOfPages + "pages/".length
+    );
+    pageId = pageId.substring(0, pageId.indexOf("/"));
+
+    setCookie(
+      "page",
+      JSON.stringify({
+        ...parseNewPage,
+        id: pageId,
+      }),
+      {
+        req,
+        res,
+        sameSite: "lax",
+      }
+    );
     return res.status(200).json(parseNewPage);
+  }
+
+  if (req.body.html) {
+    const newPageContentConfig = {
+      method: "POST",
+      contentType: "text/html",
+      body: req.body.html,
+      shouldReturnHtml: false,
+      shouldReturnProps: false,
+    };
+
+    const newPageReq = await client.api(requestConfig);
+    const newPageData = await newPageReq.executeRequest(newPageContentConfig);
+
+    if (newPageData.contentUrl) {
+      let getResource = newPageData.contentUrl;
+      getResource =
+        getResource.substring(getResource.indexOf("onenote")) +
+        "?includeIDs=true";
+
+      requestConfig["resource"] = getResource;
+      const newPageRequestConfig = {
+        body: undefined,
+        shouldReturnProps: false,
+        method: "GET",
+        contentType: "text/html",
+        shouldReturnHtml: true,
+      };
+
+      const newPageRequest = await client.api(requestConfig);
+      const newPageResponse = await newPageRequest.executeRequest(
+        newPageRequestConfig
+      );
+
+      const parseNewPage = parseOneNoteResponse(
+        newPageResponse.props.htmlContent
+      );
+
+      return res.status(200).json(parseNewPage);
+    }
+
+    //const parseNewPage = parseOneNoteResponse(newPageContent.props.htmlContent);
+
+    //return res.status(200).json(parseNewPage);
   }
 
   return res.status(200).json(pageContent);

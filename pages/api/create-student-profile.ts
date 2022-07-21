@@ -1,9 +1,8 @@
-import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { AuthenticationClient } from "../../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../../lib/Constants";
+import duplicateStudentProfile from "../../lib/duplicateStudentProfile";
 import { parseOneNoteResponse } from "../../lib/parsing";
-import createPage from "./create-page";
 
 async function foundNotebook(
   client: AuthenticationClient,
@@ -268,35 +267,6 @@ export default async function createStudentProfile(
 
     return res.status(200).json(createStudentTemplate);
   }
-  // if (!getPage) {
-  //   if (getTemplateDoc) {
-  //     const createTemplate = await createTemplatePage(
-  //       client,
-  //       context,
-  //       userSelector,
-  //       getSection.id,
-  //       getTemplateDoc
-  //     );
-
-  //     console.log(createTemplate);
-  //   }
-  // }
-
-  // console.log(getPage);
-
-  // AURGAUREG
-
-  // const createTrainingList = await createSection(
-  //   client,
-  //   context,
-  //   userSelector,
-  //   getNotebook.id
-  // );
-  // console.log(createTrainingList);
-
-  //const createProfile = await createNotebook(client, context, userSelector);
-
-  //console.log(createProfile);
 
   res.status(200).json(response);
 }

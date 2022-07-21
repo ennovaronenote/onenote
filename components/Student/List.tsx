@@ -11,8 +11,10 @@ export default function StudentList(props: any) {
     student: {},
     template: {},
   });
-  const templates = useTemplates();
   const [updateNecessary, setUpdateNecessary] = useState<boolean>(false);
+  const [updateFinished, setUpdateFinished] = useState<boolean>(false);
+  const [profileCreated, setProfileCreated] = useState<boolean>(false);
+  const [studentPageLink, setStudentPageLink] = useState<string>("");
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>, array: any[]) => {
     if (!e.target.value) return;
@@ -30,7 +32,7 @@ export default function StudentList(props: any) {
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const options = {
+    const options: any = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -84,50 +86,45 @@ export default function StudentList(props: any) {
       );
       const createPageResponse = await createPageRequest.json();
 
-      console.log(createPageResponse);
+      if (createPageResponse.success) {
+        options["body"] = undefined;
+        options["method"] = "GET";
+        const getNewPage = await fetch(
+          `http://localhost:3000/api/get-page-content?userSelector=${selections.student.userSelector}&pageId=${response.pageId}`,
+          options
+        );
+        const getNewPageResponse = await getNewPage.json();
+
+        if (getNewPageResponse.links) {
+          setStudentPageLink(getNewPageResponse.links.oneNoteWebUrl.href);
+        }
+
+        setUpdateFinished(true);
+      }
 
       return setUpdateNecessary(false);
     }
-  };
 
-  const handleUpdate = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(selections),
-    };
-
-    const request = await fetch(
-      "http://localhost:3000/api/create-student-profile",
-      options
-    );
-    const response = await request.json();
-
-    if (response.updateNecessary) {
-      return setUpdateNecessary(true);
+    if (response.links) {
+      setStudentPageLink(response.links.oneNoteWebUrl.href);
+      setProfileCreated(true);
     }
-
-    setUpdateNecessary(false);
   };
 
   useEffect(() => {
-    if (props.students.length === 0 || templates.length === 0) return;
+    if (props.students.length === 0 || props.templates.length === 0) return;
 
     setSelections({
       student: {
         ...props.students[0],
       },
       template: {
-        ...templates[0],
+        ...props.templates[0],
       },
     });
-  }, [props, templates]);
+  }, [props]);
 
-  return props.students.length === 0 || templates.length === 0 ? (
+  return props.students.length === 0 || props.templates.length === 0 ? (
     <></>
   ) : (
     <div className="w-1/4 my-5 px-10 pt-3 flex flex-col justify-center mx-auto rounded-xl border-2 border-violet-500/75">
@@ -145,10 +142,10 @@ export default function StudentList(props: any) {
       <div className="text-left">Templates Available</div>
       <select
         className="rounded-xl mx-5 my-3 p-2"
-        onChange={(e) => handleSelect(e, templates)}
+        onChange={(e) => handleSelect(e, props.templates)}
         name="template"
       >
-        {templates.map((template: any, index: number) => {
+        {props.templates.map((template: any, index: number) => {
           return <TemplateTitle template={template} key={index} />;
         })}
       </select>
@@ -161,9 +158,27 @@ export default function StudentList(props: any) {
       </button>
 
       {updateNecessary && (
-        <>
-          <div>One moment while we update your student{"'"}s table</div>
-        </>
+        <div className="m-3">
+          One moment while we update your student{"'"}s table
+        </div>
+      )}
+
+      {profileCreated && (
+        <div className="m-3">
+          Profile was created!{" "}
+          <a href={studentPageLink} target="_blank" rel="noreferrer">
+            Access it here
+          </a>
+        </div>
+      )}
+
+      {updateFinished && (
+        <div className="m-3">
+          Your student profile was created!{" "}
+          <a href={studentPageLink} target="_blank" rel="noreferrer">
+            Access it here
+          </a>
+        </div>
       )}
     </div>
   );

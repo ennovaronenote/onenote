@@ -8,6 +8,7 @@ import validateCookie from "../lib/validateCookie";
 import ErrorMessage from "../components/Error/Message";
 import ResourceMain from "../components/Resource/Main";
 import useCookies from "../hooks/useCookies";
+import getTemplates from "../lib/getTemplates";
 
 /**
  * @group Pages
@@ -67,37 +68,38 @@ function ViewPages(props: any) {
  * @ignore
  */
 export async function getServerSideProps(context: NextPageContext) {
-  const parsedSection = validateCookie({ cookie: context, key: "section" });
-  const sectionId = parsedSection.id;
+  return await getTemplates(context);
+  // const parsedSection = validateCookie({ cookie: context, key: "section" });
+  // const sectionId = parsedSection.id;
 
-  const client = AuthenticationClient.init({
-    ...AUTH_CONFIG,
-    resource: `onenote/sections/${sectionId}/pages`,
-  });
-  const request = await client.api({ context });
-  const response = await request.executeRequest({
-    shouldReturnProps: true,
-  });
+  // const client = AuthenticationClient.init({
+  //   ...AUTH_CONFIG,
+  //   resource: `onenote/sections/${sectionId}/pages`,
+  // });
+  // const request = await client.api({ context });
+  // const response = await request.executeRequest({
+  //   shouldReturnProps: true,
+  // });
 
-  const templates: any = [];
-  if (response.props.value) {
-    response.props.value.map((page: any) => {
-      templates.push({
-        id: page.id,
-        title: page.title,
-        contentUrl: page.contentUrl,
-      });
-    });
-  }
+  // const templates: any = [];
+  // if (response.props.value) {
+  //   response.props.value.map((page: any) => {
+  //     templates.push({
+  //       id: page.id,
+  //       title: page.title,
+  //       contentUrl: page.contentUrl,
+  //     });
+  //   });
+  // }
 
-  setCookie("templates", JSON.stringify(templates), {
-    req: context.req,
-    res: context.res,
-    sameSite: "lax",
-    path: "/",
-  });
+  // setCookie("templates", JSON.stringify(templates), {
+  //   req: context.req,
+  //   res: context.res,
+  //   sameSite: "lax",
+  //   path: "/",
+  // });
 
-  return response;
+  // return response;
 }
 
 export default ViewPages;

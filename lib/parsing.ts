@@ -8,7 +8,7 @@ export const parseOneNoteRequest = (
 ) => {
   const table = document.createElement("table");
   table.setAttribute("data-id", "trainingTable");
-  table.setAttribute("id", tableId || "none");
+  if (tableId) table.setAttribute("id", tableId);
   const tableHeaders = document.createElement("thead");
   const tableBody = document.createElement("tbody");
   const headerRow = document.createElement("tr");

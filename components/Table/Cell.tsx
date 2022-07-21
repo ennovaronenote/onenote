@@ -18,7 +18,7 @@ function TableCell({ text, cellType }: TableCellProps) {
   useEffect(() => {
     if (cellType === "link") {
       setLinkContent(
-        <a href={text.href} target="_blank">
+        <a href={text.href} target="_blank" rel="noreferrer">
           {text.displayText}
         </a>
       );
