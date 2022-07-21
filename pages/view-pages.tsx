@@ -68,8 +68,19 @@ function ViewPages(props: any) {
  */
 export async function getServerSideProps(context: NextPageContext) {
   const templates = await getTemplates(context);
+  const defaultTemplates = {
+    redirect: {
+      permanent: false,
+      destination: "/view-sections",
+    },
+    props: {
+      error: true,
+    },
+  };
 
-  if (templates.props.error) {
+  if (!templates || !templates.props) return defaultTemplates;
+
+  if (typeof templates.props.error === "undefined" || templates.props.error) {
     return {
       redirect: {
         permanent: false,
