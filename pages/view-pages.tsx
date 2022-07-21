@@ -9,6 +9,7 @@ import ErrorMessage from "../components/Error/Message";
 import ResourceMain from "../components/Resource/Main";
 import useCookies from "../hooks/useCookies";
 import getTemplates from "../lib/getTemplates";
+import PageTitle from "../components/PageTitle";
 
 /**
  * @group Pages
@@ -50,9 +51,7 @@ function ViewPages(props: any) {
     <ErrorMessage error={error} />
   ) : (
     <div className="container mx-auto">
-      <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
-        {selectedSection}
-      </h1>
+      <PageTitle title={selectedSection} />
 
       <ResourceMain
         resource={props.value}
@@ -69,37 +68,6 @@ function ViewPages(props: any) {
  */
 export async function getServerSideProps(context: NextPageContext) {
   return await getTemplates(context);
-  // const parsedSection = validateCookie({ cookie: context, key: "section" });
-  // const sectionId = parsedSection.id;
-
-  // const client = AuthenticationClient.init({
-  //   ...AUTH_CONFIG,
-  //   resource: `onenote/sections/${sectionId}/pages`,
-  // });
-  // const request = await client.api({ context });
-  // const response = await request.executeRequest({
-  //   shouldReturnProps: true,
-  // });
-
-  // const templates: any = [];
-  // if (response.props.value) {
-  //   response.props.value.map((page: any) => {
-  //     templates.push({
-  //       id: page.id,
-  //       title: page.title,
-  //       contentUrl: page.contentUrl,
-  //     });
-  //   });
-  // }
-
-  // setCookie("templates", JSON.stringify(templates), {
-  //   req: context.req,
-  //   res: context.res,
-  //   sameSite: "lax",
-  //   path: "/",
-  // });
-
-  // return response;
 }
 
 export default ViewPages;

@@ -3,6 +3,7 @@ import { AuthenticationClient } from "../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../lib/Constants";
 import ErrorMessage from "../components/Error/Message";
 import ResourceMain from "../components/Resource/Main";
+import PageTitle from "../components/PageTitle";
 
 /**
  * Page to render list of notebooks
@@ -14,11 +15,10 @@ function ViewNotebooks(props: any) {
   if (!props.value)
     return <p className="text-center">Loading your notebooks, please wait.</p>;
 
+  // Returned JSX
   return (
     <div className="container mx-auto">
-      <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
-        My Notebooks
-      </h1>
+      <PageTitle title={"My Notebooks"} />
 
       <ResourceMain
         resource={props.value}

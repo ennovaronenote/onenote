@@ -7,6 +7,7 @@ import ResourceMain from "../components/Resource/Main";
 import ErrorMessage from "../components/Error/Message";
 import useCookies from "../hooks/useCookies";
 import validateCookie from "../lib/validateCookie";
+import PageTitle from "../components/PageTitle";
 
 /**
  * Page to view list of sections. This page needs a notebook ID to make a graph request, so it validates the selected notebook via cookies.
@@ -42,9 +43,7 @@ function ViewSections(props: any) {
     <ErrorMessage error={error} />
   ) : (
     <>
-      <h1 className="prose-2xl text-neutral-700 mx-auto text-center py-5">
-        {selectedNotebook}
-      </h1>
+      <PageTitle title={selectedNotebook} />
 
       <ResourceMain
         resource={props.value}
