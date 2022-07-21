@@ -10,6 +10,13 @@ export default async function getTemplates(
   const parsedSection = validateCookie({ cookie: context, key: "section" });
   const sectionId = sectionIdOverride || parsedSection.id;
 
+  if (!sectionId) {
+    return await {
+      error: true,
+      message: "No section ID found",
+    };
+  }
+
   const client = AuthenticationClient.init({
     ...AUTH_CONFIG,
     resource: `onenote/sections/${sectionId}/pages`,
