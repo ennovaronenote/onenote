@@ -14,6 +14,7 @@ export default function StudentList(props: any) {
   const [updateNecessary, setUpdateNecessary] = useState<boolean>(false);
   const [updateFinished, setUpdateFinished] = useState<boolean>(false);
   const [profileCreated, setProfileCreated] = useState<boolean>(false);
+  const [inProgress, setInProgress] = useState<boolean>(false);
   const [studentPageLink, setStudentPageLink] = useState<string>("");
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>, array: any[]) => {
@@ -31,6 +32,7 @@ export default function StudentList(props: any) {
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setInProgress(true);
 
     const options: any = {
       method: "POST",
@@ -109,6 +111,8 @@ export default function StudentList(props: any) {
       setStudentPageLink(response.links.oneNoteWebUrl.href);
       setProfileCreated(true);
     }
+
+    setInProgress(false);
   };
 
   useEffect(() => {
@@ -154,7 +158,7 @@ export default function StudentList(props: any) {
         className="bg-blue-500 rounded-full text-white m-3 p-1 w-52 mx-auto"
         onClick={handleSubmit}
       >
-        Create Student Profile
+        {inProgress ? "Working on it" : "Create Student Profile"}
       </button>
 
       {updateNecessary && (
