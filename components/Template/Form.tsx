@@ -5,6 +5,7 @@ import TemplateInputs from "./Inputs";
 import TemplatePreviewContainer from "./Preview/Container";
 import { updateCurrentTemplate } from "../../lib/retrieveCurrentTemplate";
 import { parseOneNoteRequest, parseOneNoteResponse } from "../../lib/parsing";
+import PageTitle from "../PageTitle";
 
 /**
  * @group Components
@@ -57,6 +58,7 @@ function TemplateForm(props: any) {
 
     setHeader("");
     setRowData("");
+    setTemplateName("");
     setCookieData({
       tableId: activeCookie.tableId,
       headers: [],
@@ -161,7 +163,7 @@ function TemplateForm(props: any) {
       />
 
       <div className="w-3/4 mx-auto my-5 pb-10 bg-blue-500/75 border border-violet-500 text-center text-white lg:w-1/2">
-        <div className="prose-2xl text-white py-5">Template Creation</div>
+        <PageTitle title="Template Creation" classNames="text-white" />
 
         <TemplateInputs
           modifyHeader={modifyHeader}
