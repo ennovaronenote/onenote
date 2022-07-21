@@ -44,7 +44,7 @@ export default function StudentList(props: any) {
     };
 
     const request = await fetch(
-      "https://developercaleb.com/api/create-student-profile",
+      "http://localhost:3000/api/create-student-profile",
       options
     );
     const response = await request.json();
@@ -84,7 +84,7 @@ export default function StudentList(props: any) {
 
       options["body"] = JSON.stringify([createPageBody]);
       const createPageRequest = await fetch(
-        `https://developercaleb.com/api/create-page?userSelector=${selections.student.userSelector}&pageId=${response.pageId}`,
+        `http://localhost:3000/api/create-page?userSelector=${selections.student.userSelector}&pageId=${response.pageId}`,
         options
       );
       const createPageResponse = await createPageRequest.json();
@@ -93,7 +93,7 @@ export default function StudentList(props: any) {
         options["body"] = undefined;
         options["method"] = "GET";
         const getNewPage = await fetch(
-          `https://developercaleb.com/api/get-page-content?userSelector=${selections.student.userSelector}&pageId=${response.pageId}`,
+          `http://localhost:3000/api/get-page-content?userSelector=${selections.student.userSelector}&pageId=${response.pageId}`,
           options
         );
         const getNewPageResponse = await getNewPage.json();

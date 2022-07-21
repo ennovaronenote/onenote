@@ -114,7 +114,7 @@ function TemplateForm(props: any) {
 
     setCreatingPage(true);
     const createPage = await fetch(
-      "https://developercaleb.com/api/create-page",
+      "http://localhost:3000/api/create-page",
       fetchBody["content"]
     );
     const createPageResponse = await createPage.json();
