@@ -5,6 +5,7 @@ import { IClientOptions } from "./IClientOptions";
 type ApiConfig = {
   context?: any;
   resource?: string;
+  userSelector?: string;
 };
 
 class AuthenticationClient {
@@ -30,11 +31,18 @@ class AuthenticationClient {
     return new AuthenticationClient(options);
   }
 
-  public async api({ context, resource = "" }: ApiConfig) {
+  public async api({ context, resource = "", userSelector = "" }: ApiConfig) {
     if (resource) {
       this.config = {
         ...this.config,
         resource,
+      };
+    }
+
+    if (userSelector) {
+      this.config = {
+        ...this.config,
+        userSelector,
       };
     }
 

@@ -1,4 +1,5 @@
 import { parse } from "cookie";
+import { setCookie } from "cookies-next";
 import { NextPageContext } from "next";
 
 type RequestedCookie<T> = {
@@ -24,6 +25,12 @@ function validateCookie(context: RequestedCookie<any>) {
 
   if (context["key"]) {
     if (amountOfCookies !== 0 && !cookies[context["key"]]) {
+      setCookie(context.key, JSON.stringify({}), {
+        req: context.cookie.req,
+        res: context.cookie.res,
+        sameSite: "lax",
+      });
+
       return {
         props: {
           error: {

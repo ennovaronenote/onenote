@@ -193,6 +193,7 @@ class GraphRequest {
       let resourceCopy = resource || "";
       if (!resourceCopy) return "";
 
+      // If there is a leading '/', remove it
       if (resourceCopy.charAt(0) === "/")
         resourceCopy = resourceCopy.substring(1);
 
@@ -209,14 +210,17 @@ class GraphRequest {
 
     this.config.resource = parseResource(baseUrl.length, this.config.resource);
 
+    // If the entire url is custom, parse it
     if (baseUrl && userSelector && this.config.resource) {
       this.#requestUrl = `${baseUrl}/${userSelector}/${this.config.resource}`;
     }
 
+    // If there is no resource, only specify the base URL and user selector in the URL
     if (!this.config.resource) {
       this.#requestUrl = `${baseUrl}/${userSelector}`;
     }
 
+    // If there is no user selector, return an empty string because no request can happen
     if (!userSelector) {
       this.#requestUrl = "";
     }

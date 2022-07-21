@@ -9,27 +9,59 @@ export default async function createPage(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") res.status(400).json({});
-
+  if (req.method === "GET") return res.status(400).json({});
   const client = AuthenticationClient.init(AUTH_CONFIG);
   const section: any = { id: undefined };
   const page: any = { id: undefined };
 
-  try {
-    const parsedCookies = req.cookies;
-    const parsedSection = JSON.parse(parsedCookies.section || "");
-    const parsedPage = JSON.parse(parsedCookies.page || "");
-    section.id = parsedSection.id || undefined;
-    page.id = parsedPage.id || undefined;
-    page.title = parsedPage.displayName || undefined;
-  } catch (e) {
-    console.error(e);
+  if (!req.query.userSelector) {
+    try {
+      const parsedCookies = req.cookies;
+      const sectionCookie = parsedCookies.section;
+      const pageCookie: string = parsedCookies.page || "";
+
+      if (!sectionCookie) {
+        return res.status(400).json({
+          error: true,
+          message:
+            "You need to at least select a section before you can create a page.",
+        });
+      }
+
+      if (!pageCookie) {
+        return (
+          !sectionCookie &&
+          res.status(400).json({
+            error: true,
+            message:
+              "You need to at least select a section before you can create a page.",
+          })
+        );
+      }
+
+      const parsedSection = JSON.parse(sectionCookie);
+      const parsedPage = JSON.parse(pageCookie);
+      section.id = parsedSection.id || undefined;
+      page.id = parsedPage.id || undefined;
+      page.title = parsedPage.displayName || undefined;
+    } catch (e) {
+      console.error(
+        `An error has occured in /api/create-page: ${JSON.stringify(e)}`
+      );
+    }
   }
 
-  const requestConfig = {
+  const requestConfig: any = {
     context: { req, res },
     resource: `onenote/pages/${page.id}/content?includeIDs=true`,
   };
+
+  if (req.query.pageId) {
+    requestConfig[
+      "resource"
+    ] = `onenote/pages/${req.query.pageId}/content?includeIDs=true`;
+    requestConfig["userSelector"] = req.query.userSelector;
+  }
 
   const executeRequestConfig = {
     method: "PATCH",
@@ -67,15 +99,13 @@ export default async function createPage(
     );
     const parseNewPage = parseOneNoteResponse(newPageContent.props.htmlContent);
 
+    setCookie("page", JSON.stringify(parseNewPage), {
+      req,
+      res,
+      sameSite: "lax",
+    });
     return res.status(200).json(parseNewPage);
   }
 
   return res.status(200).json(pageContent);
-
-  // const response = await request.executeRequest({
-  //   body: req.body,
-  //   method: "POST",
-  //   contentType: "text/html",
-  // });
-  res.status(200).json({});
 }

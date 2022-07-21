@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ErrorType } from "../components/Error/Type";
 import { AuthenticationClient } from "../lib/AuthenticationClient";
 import { AUTH_CONFIG } from "../lib/Constants";
+import { setCookie } from "cookies-next";
 import validateCookie from "../lib/validateCookie";
 import ErrorMessage from "../components/Error/Message";
 import ResourceMain from "../components/Resource/Main";
@@ -35,7 +36,11 @@ function ViewPages(props: any) {
     }
 
     setSelectedSection(getCookieByKey("section")["displayName"]);
-    if (props.value) return setLoading(false);
+
+    if (props.value) {
+      localStorage.setItem("templates", JSON.stringify(props.value));
+      return setLoading(false);
+    }
   }, [props, getCookieByKey]);
 
   return loading ? (
@@ -74,7 +79,24 @@ export async function getServerSideProps(context: NextPageContext) {
     shouldReturnProps: true,
   });
 
-  if (response.value) return response.value;
+  const templates: any = [];
+  if (response.props.value) {
+    response.props.value.map((page: any) => {
+      templates.push({
+        id: page.id,
+        title: page.title,
+        contentUrl: page.contentUrl,
+      });
+    });
+  }
+
+  setCookie("templates", JSON.stringify(templates), {
+    req: context.req,
+    res: context.res,
+    sameSite: "lax",
+    path: "/",
+  });
+
   return response;
 }
 
