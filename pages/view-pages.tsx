@@ -78,9 +78,10 @@ export async function getServerSideProps(context: NextPageContext) {
     },
   };
 
+  console.log(templates);
   if (!templates || !templates.props) return defaultTemplates;
 
-  if (typeof templates.props.error === "undefined" || templates.props.error) {
+  if (templates.props.error) {
     return {
       redirect: {
         permanent: false,
