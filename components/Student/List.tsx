@@ -6,7 +6,8 @@ import Student from "./Student";
 import TemplateTitle from "./TemplateTitle";
 
 export default function StudentList(props: any) {
-  const { activeCookie, setCookieData, getCookieByKey } = useCookies("page");
+	const { students = [], templates = [] } = props;  
+const { activeCookie, setCookieData, getCookieByKey } = useCookies("page");
   const [selections, setSelections] = useState<any>({
     student: {},
     template: {},
@@ -116,20 +117,20 @@ export default function StudentList(props: any) {
   };
 
   useEffect(() => {
-    if (props.students.length === 0 || props.templates.length === 0) return;
+    if (students.length === 0 || templates.length === 0) return;
 
     setSelections({
       student: {
-        ...props.students[0],
+        ...students[0],
       },
       template: {
-        ...props.templates[0],
+        ...templates[0],
       },
     });
-  }, [props]);
+  }, [students, templates]);
 
-  return props.students.length === 0 || props.templates.length === 0 ? (
-    <></>
+  return students.length === 0 || templates.length === 0 ? (
+    <div className="w-1/4 my-5 px-10 p-4 flex flex-col justify-center mx-auto rounded-xl border-2 border-violet-500/75">Please navigate to {'"'}View Pages{'"'} to populate templates.</div>
   ) : (
     <div className="w-1/4 my-5 px-10 pt-3 flex flex-col justify-center mx-auto rounded-xl border-2 border-violet-500/75">
       <div className="text-left">Students</div>

@@ -9,8 +9,6 @@ import NavbarLink from "./Link";
  * @group Components
  */
 function NavbarLinks() {
-  const templates = useTemplates();
-
   return (
     <div className="container mx-auto flex flex-row justify-around">
       <NavbarLink href="/" value="Home" />
