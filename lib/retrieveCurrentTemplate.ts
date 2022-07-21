@@ -20,7 +20,7 @@ export default function retrieveCurrentTemplate() {
     const { headers = [], rows = [] } = parsedTemplate;
 
     if (headers.length === 0 || rows.length === 0) {
-      setCookie("template", { headers, rows });
+      setCookie("template", { headers, rows }, { sameSite: "lax" });
     }
 
     return {
