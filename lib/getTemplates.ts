@@ -19,23 +19,5 @@ export default async function getTemplates(
     shouldReturnProps: true,
   });
 
-  const templates: any = [];
-  if (response.props.value) {
-    response.props.value.map((page: any) => {
-      templates.push({
-        id: page.id,
-        title: page.title,
-        contentUrl: page.contentUrl,
-      });
-    });
-  }
-
-  setCookie("templates", JSON.stringify(templates), {
-    req: context.req,
-    res: context.res,
-    sameSite: "lax",
-    path: "/",
-  });
-
   return response;
 }

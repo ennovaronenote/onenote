@@ -4,9 +4,6 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  httpAgentOptions: {
-    keepAlive: false,
-  },
 };
 
 module.exports = nextConfig;
