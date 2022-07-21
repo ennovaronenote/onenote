@@ -8,7 +8,9 @@ export default function useTemplates() {
       const templates = JSON.parse(localStorage.getItem("templates") || "");
       if (templates) return setFoundTemplates(templates);
     } catch (e) {
+      localStorage.setItem("templates", JSON.stringify([]));
       console.error(`Error parsing localStorage ${e}`);
+      return setFoundTemplates([]);
     }
   }, []);
 

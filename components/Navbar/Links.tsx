@@ -1,3 +1,7 @@
+import { hasCookie } from "cookies-next";
+import { useEffect, useState } from "react";
+import useCookies from "../../hooks/useCookies";
+import useTemplates from "../../hooks/useTemplates";
 import NavbarLink from "./Link";
 
 /**
@@ -5,6 +9,8 @@ import NavbarLink from "./Link";
  * @group Components
  */
 function NavbarLinks() {
+  const templates = useTemplates();
+
   return (
     <div className="container mx-auto flex flex-row justify-around">
       <NavbarLink href="/" value="Home" />
@@ -12,6 +18,7 @@ function NavbarLinks() {
       <NavbarLink href="/view-sections" value="View Sections" />
       <NavbarLink href="/view-pages" value="View Pages" />
       <NavbarLink href="/create-template" value="Create Template" />
+      <NavbarLink href="/view-student-pages" value="View Student Profiles" />
       <NavbarLink href="/add-student" value="Add Template to Student Profile" />
     </div>
   );

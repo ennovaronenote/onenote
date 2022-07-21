@@ -6,7 +6,9 @@ import TableContainer from "../Table/Container";
 type ResourceMainProps = {
   resource: any;
   cookieKey: string;
+  hintEnabled?: boolean;
   tableCookieKey?: string;
+  customOnClick?: any;
   headers: any[];
 };
 
@@ -14,6 +16,7 @@ type ResourceMainProps = {
  * @group Components
  */
 function ResourceMain(props: ResourceMainProps) {
+  const { hintEnabled = true } = props;
   const { setCookieData, getCookieByKey, activeCookie } = useCookies(
     props.cookieKey
   );
@@ -34,16 +37,21 @@ function ResourceMain(props: ResourceMainProps) {
     <div
       className="container mx-auto"
       onClick={() => {
+        if (props.customOnClick) props.customOnClick(props.tableCookieKey);
         return setCookieData(
           getCookieByKey(props.tableCookieKey || "notebook")
         );
       }}
     >
-      <div className="text-center italic text-sm pb-3">
-        Hint: if you click a row, the app will remember your selection!
-      </div>
+      {hintEnabled && (
+        <>
+          <div className="text-center italic text-sm pb-3">
+            Hint: if you click a row, the app will remember your selection!
+          </div>
 
-      <div>{currentSelection}</div>
+          <div>{currentSelection}</div>
+        </>
+      )}
 
       <TableContainer
         headers={props.headers}

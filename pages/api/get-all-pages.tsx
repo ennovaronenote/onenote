@@ -4,30 +4,16 @@ import { AUTH_CONFIG } from "../../lib/Constants";
 import { parse } from "node-html-parser";
 import { parseOneNoteResponse } from "../../lib/parsing";
 
-export default async function getPageContent(
+export default async function getAllPages(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const client = AuthenticationClient.init(AUTH_CONFIG);
-  const page: any = { id: undefined };
-
-  page.id = req.query.pageId;
   const userSelector = req.query.userSelector;
-
-  if (!req.query.pageId) {
-    try {
-      const parsedCookies = req.cookies;
-      const parsedPage = JSON.parse(parsedCookies.page || "");
-      page.id = parsedPage.id || undefined;
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   const requestConfig: any = {
     context: { req, res },
     userSelector: userSelector || undefined,
-    resource: req.query.resource || `onenote/pages/${page.id}`,
+    resource: req.query.resource || `onenote/sections`,
   };
 
   const executeRequestConfig = {
@@ -40,5 +26,12 @@ export default async function getPageContent(
 
   if (!response) return res.status(400).json({});
 
+  if (response.value) {
+    const foundTrainingList = response.value.find((section: any) => {
+      return section.displayName === "Training List";
+    });
+
+    return res.status(200).json(foundTrainingList || response.value);
+  }
   res.status(200).json(response);
 }

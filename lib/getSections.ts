@@ -3,34 +3,33 @@ import { AuthenticationClient } from "./AuthenticationClient";
 import { AUTH_CONFIG } from "./Constants";
 import validateCookie from "./validateCookie";
 
-export default async function getTemplates(
+export default async function getSections(
   context: any,
-  sectionIdOverride?: string
+  notebookIdOverride?: string
 ) {
-  const parsedSection = validateCookie({ cookie: context, key: "section" });
-  const sectionId = sectionIdOverride || parsedSection.id;
+  const parsedNotebook = validateCookie({ cookie: context, key: "notebook" });
+  const notebookId = notebookIdOverride || parsedNotebook.id;
 
   const client = AuthenticationClient.init({
     ...AUTH_CONFIG,
-    resource: `onenote/sections/${sectionId}/pages`,
+    resource: `onenote/notebooks/${notebookId}/sections`,
   });
   const request = await client.api({ context });
   const response = await request.executeRequest({
     shouldReturnProps: true,
   });
 
-  const templates: any = [];
+  const sections: any = [];
   if (response.props.value) {
-    response.props.value.map((page: any) => {
-      templates.push({
-        id: page.id,
-        title: page.title,
-        contentUrl: page.contentUrl,
+    response.props.value.map((section: any) => {
+      sections.push({
+        id: section.id,
+        displayName: section.displayName,
       });
     });
   }
 
-  setCookie("templates", JSON.stringify(templates), {
+  setCookie("sections", JSON.stringify(sections), {
     req: context.req,
     res: context.res,
     sameSite: "lax",

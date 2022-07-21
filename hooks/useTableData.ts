@@ -4,19 +4,28 @@ const useTableData = () => {
     if (data.length === 0) return [];
 
     data.map((content: any) => {
-      const newData = {
-        dataType,
-        id: content.id,
-        displayName: content.displayName || content.title,
-        link: {
-          displayText: `Click here to access ${dataType} in OneNote`,
-          href: content.links.oneNoteWebUrl.href,
-          graphResource: `${content.self}`,
-        },
-        creationDate: new Date(content.createdDateTime).toLocaleString(),
-      };
+      if (!content.id) {
+        newDataTable.push(content);
+      } else {
+        const newData: any = {
+          contentUrl: content.contentUrl || undefined,
+          dataType,
+          id: content.id,
+          displayName: content.displayName || content.title,
+          link: content.links
+            ? {
+                displayText: `Click here to access ${dataType} in OneNote`,
+                href: content.links.oneNoteWebUrl.href,
+                graphResource: `${content.self}`,
+              }
+            : undefined,
+          creationDate: content.createdDateTime
+            ? new Date(content.createdDateTime).toLocaleString()
+            : undefined,
+        };
 
-      newDataTable.push(newData);
+        newDataTable.push(newData);
+      }
     });
 
     return newDataTable;

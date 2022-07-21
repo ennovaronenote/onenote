@@ -20,9 +20,14 @@ function TableRow(props: TableRowProps) {
     >
       {Object.entries(row).map((cellData: any) => {
         const cellKey = `${row.id}_${cellData}`;
-        const cellType = cellData[0] === "link" ? "link" : "string";
-        if (cellData[0] === "id" || cellData[0] === "dataType") return;
-
+        const cellType =
+          cellData[0] === "link" && cellData[1] ? "link" : "string";
+        if (
+          cellData[0] === "id" ||
+          cellData[0] === "dataType" ||
+          cellData[0] === "contentUrl"
+        )
+          return;
         return (
           <TableCell
             key={cellKey}
