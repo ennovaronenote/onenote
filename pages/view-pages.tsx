@@ -78,7 +78,6 @@ export async function getServerSideProps(context: NextPageContext) {
     },
   };
 
-  console.log(templates);
   if (!templates || !templates.props) return defaultTemplates;
 
   if (templates.props.error) {
