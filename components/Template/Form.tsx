@@ -14,10 +14,7 @@ function TemplateForm(props: any) {
   const { activeCookie, setCookieData, getCookieByKey } =
     useCookies("template");
   const [inputs, setInputs] = useState<any>({});
-  const [header, setHeader] = useState<string>("");
-  const [templateName, setTemplateName] = useState<string>("");
   const [creatingPage, setCreatingPage] = useState<boolean>(false);
-  const [rowData, setRowData] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
   const modifyInputs = (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,13 +31,14 @@ function TemplateForm(props: any) {
   // Resets the input data and sets the cookie that includes the list of headers and rows
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (!inputs.header) return;
 
     const { headers = [], rows = [] } = updateCurrentTemplate(
-      header,
-      rowData || undefined
+      inputs.header,
+      inputs.rowData || undefined
     );
-    setHeader("");
-    setRowData("");
+
+    handleClear(event, true);
     setCookieData({
       tableId: activeCookie.tableId,
       headers,
@@ -49,14 +47,19 @@ function TemplateForm(props: any) {
   };
 
   // Clears only the header field so the app knows how to title the page
-  const handleClear = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleClear = (
+    event: MouseEvent<HTMLButtonElement>,
+    shouldKeepTemplateName?: boolean
+  ) => {
     event.preventDefault();
 
     const getKeys = Object.keys(inputs);
     const clearedInputs: any = {};
 
     getKeys.forEach((key: string) => {
-      clearedInputs[key] = "";
+      if (key === "templateName" && shouldKeepTemplateName)
+        clearedInputs[key] = inputs[key];
+      else clearedInputs[key] = "";
     });
 
     setInputs(clearedInputs);
@@ -78,8 +81,8 @@ function TemplateForm(props: any) {
     event.preventDefault();
 
     const { headers = [], rows = [[]], tableId = "" } = activeCookie;
-    const parsed = templateName
-      ? parseOneNoteRequest(headers, rows, tableId, templateName)
+    const parsed = inputs.templateName
+      ? parseOneNoteRequest(headers, rows, tableId, inputs.templateName)
       : parseOneNoteRequest(headers, rows, tableId);
 
     const htmlOutput =
@@ -90,7 +93,7 @@ function TemplateForm(props: any) {
     const fetchBody: any = { content: JSON.stringify({}) };
     const pageCookie = getCookieByKey("page") || {};
 
-    if (pageCookie.displayName !== templateName) {
+    if (pageCookie.displayName !== inputs.templateName) {
       fetchBody["content"] = {
         method: "POST",
         headers: {
@@ -118,7 +121,7 @@ function TemplateForm(props: any) {
     setCreatingPage(true);
     try {
       const createPage = await fetch(
-        "http://localhost:3000/api/create-page",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/create-page`,
         fetchBody["content"]
       );
 
