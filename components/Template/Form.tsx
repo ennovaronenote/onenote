@@ -6,6 +6,7 @@ import TemplatePreviewContainer from "./Preview/Container";
 import { updateCurrentTemplate } from "../../lib/retrieveCurrentTemplate";
 import { parseOneNoteRequest, parseOneNoteResponse } from "../../lib/parsing";
 import PageTitle from "../PageTitle";
+import createTemplate from "../../lib/createTemplate";
 
 /**
  * @group Components
@@ -13,7 +14,11 @@ import PageTitle from "../PageTitle";
 function TemplateForm(props: any) {
   const { activeCookie, setCookieData, getCookieByKey } =
     useCookies("template");
-  const [inputs, setInputs] = useState<any>({});
+  const [inputs, setInputs] = useState<any>({
+    header: "",
+    rowData: "",
+    templateName: "",
+  });
   const [creatingPage, setCreatingPage] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
@@ -31,11 +36,11 @@ function TemplateForm(props: any) {
   // Resets the input data and sets the cookie that includes the list of headers and rows
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (!inputs.header) return;
+    if (!inputs.header || !inputs.templateName) return;
 
     const { headers = [], rows = [] } = updateCurrentTemplate(
       inputs.header,
-      inputs.rowData || undefined
+      inputs.rowData
     );
 
     handleClear(event, true);
@@ -79,69 +84,20 @@ function TemplateForm(props: any) {
   // Performs necessary parsing on the HTML so that the data can successfully be sent to OneNote
   const sendTable = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    setCreatingPage(true);
 
     const { headers = [], rows = [[]], tableId = "" } = activeCookie;
-    const parsed = inputs.templateName
+    const parsed: HTMLElement = inputs.templateName
       ? parseOneNoteRequest(headers, rows, tableId, inputs.templateName)
       : parseOneNoteRequest(headers, rows, tableId);
 
-    const htmlOutput =
-      parsed.querySelector(`[data-id="trainingTable"]`)?.outerHTML ||
-      parsed.outerHTML;
-    const table = parsed.querySelector(`[data-id="trainingTable"]`);
-    const tableID = table?.getAttribute("id") || "";
-    const fetchBody: any = { content: JSON.stringify({}) };
-    const pageCookie = getCookieByKey("page") || {};
+    const pageCookie = getCookieByKey("page");
+    if (!pageCookie) return setCreatingPage(false);
 
-    if (pageCookie.displayName !== inputs.templateName) {
-      fetchBody["content"] = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          html: parsed.outerHTML,
-        }),
-      };
-    } else {
-      const createPageBody = {
-        target: tableId,
-        action: "replace",
-        content: htmlOutput,
-      };
-      fetchBody["content"] = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify([createPageBody]),
-      };
-    }
-
-    setCreatingPage(true);
-    try {
-      const createPage = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/create-page`,
-        fetchBody["content"]
-      );
-
-      const createPageResponse = await createPage.json();
-      const error = createPageResponse.error;
-
-      if (error) console.log(`Error ${JSON.stringify(error)}`);
-
-      setCookieData({
-        tableId: createPageResponse.id,
-        headers: createPageResponse.headers,
-        rows: createPageResponse.rows,
-      });
-
-      setCreatingPage(false);
-    } catch (error) {
-      console.error(`Error when sending OneNote table: ${error}`);
-      setCreatingPage(false);
-      return setError(true);
-    }
+    const { displayName = "" } = pageCookie;
+    const { templateName = "" } = inputs;
+    await createTemplate(parsed, displayName, templateName, tableId);
+    setCreatingPage(false);
   };
 
   // If there is a page selected, parse its HTML and set the cookie data accordingly.
@@ -154,13 +110,11 @@ function TemplateForm(props: any) {
         };
       });
 
-      const parsed = parseOneNoteResponse(props.selectedPage) || {
-        id: "",
-        headers: [],
-        rows: [],
-      };
+      const parsed = parseOneNoteResponse(props.selectedPage);
+      const emptyHeaders = parsed.headers.length === 0;
+      const emptyRows = parsed.rows.length === 0;
 
-      if (parsed.headers.length !== 0 && parsed.rows.length !== 0) {
+      if (!emptyHeaders && !emptyRows) {
         setCookieData({
           tableId: parsed.id,
           headers: parsed.headers,
