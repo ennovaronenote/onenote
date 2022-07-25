@@ -1,10 +1,6 @@
 import { NextPageContext } from "next";
 import { useEffect, useState } from "react";
 import { ErrorType } from "../components/Error/Type";
-import { AuthenticationClient } from "../lib/AuthenticationClient";
-import { AUTH_CONFIG } from "../lib/Constants";
-import { setCookie } from "cookies-next";
-import validateCookie from "../lib/validateCookie";
 import ErrorMessage from "../components/Error/Message";
 import ResourceMain from "../components/Resource/Main";
 import useCookies from "../hooks/useCookies";
