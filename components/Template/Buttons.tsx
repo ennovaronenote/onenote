@@ -16,31 +16,28 @@ function TemplateButtons(
 ) {
   return (
     <>
-      <div className="flex flex-col items-center lg:flex-row lg:justify-center">
+      <div className="flex flex-col items-center lg:flex-row lg:justify-center !text-white">
         <TemplateButton
           name="Add Header to Preview"
           onClick={props.handleSubmit}
-          className="hover:border-red-500 hover:border !lg:w-52"
+          className="!lg:w-52"
         />
 
         {props.creatingPage ? (
-          <TemplateButton
-            name="Creating page now"
-            className="hover:border-red-500 hover:border !lg:w-52"
-          />
+          <TemplateButton name="Creating page now" className="!lg:w-52" />
         ) : (
           <TemplateButton
             name="Send Table to OneNote"
-            className="hover:border-red-500 hover:border !lg:w-56"
+            className="!lg:w-56"
             onClick={props.sendTable}
           />
         )}
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center text-white">
         <TemplateButton
           name="Clear"
-          className="!lg:w-56 bg-red-500 hover:border-violet-500/75 hover:border-2"
+          className="!lg:w-56 bg-red-500"
           onClick={props.handleClear}
         />
       </div>

@@ -17,6 +17,7 @@ function TemplateForm(props: any) {
   const [templateName, setTemplateName] = useState<string>("");
   const [creatingPage, setCreatingPage] = useState<boolean>(false);
   const [rowData, setRowData] = useState<string>("");
+  const [error, setError] = useState<boolean>(false);
 
   // Header acts as an individual header for a column in the table
   const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,22 +116,29 @@ function TemplateForm(props: any) {
     }
 
     setCreatingPage(true);
-    const createPage = await fetch(
-      "http://localhost:3000/api/create-page",
-      fetchBody["content"]
-    );
-    const createPageResponse = await createPage.json();
-    const error = createPageResponse.error;
+    try {
+      const createPage = await fetch(
+        "http://localhost:3000/api/create-page",
+        fetchBody["content"]
+      );
 
-    if (error) console.log(`Error ${JSON.stringify(error)}`);
+      const createPageResponse = await createPage.json();
+      const error = createPageResponse.error;
 
-    setCookieData({
-      tableId: createPageResponse.id,
-      headers: createPageResponse.headers,
-      rows: createPageResponse.rows,
-    });
+      if (error) console.log(`Error ${JSON.stringify(error)}`);
 
-    setCreatingPage(false);
+      setCookieData({
+        tableId: createPageResponse.id,
+        headers: createPageResponse.headers,
+        rows: createPageResponse.rows,
+      });
+
+      setCreatingPage(false);
+    } catch (error) {
+      console.error(`Error when sending OneNote table: ${error}`);
+      setCreatingPage(false);
+      return setError(true);
+    }
   };
 
   // If there is a page selected, parse its HTML and set the cookie data accordingly.
@@ -157,30 +165,39 @@ function TemplateForm(props: any) {
   // Actual JSX returned
   return (
     <>
-      <TemplatePreviewContainer
-        templateName={templateName}
-        activeCookie={activeCookie}
-      />
+      {error ? (
+        <div className="text-xl text-center py-5">
+          An unexpected error seemed to occur. Are you sure you entered proper
+          data?
+        </div>
+      ) : (
+        <>
+          <TemplatePreviewContainer
+            templateName={templateName}
+            activeCookie={activeCookie}
+          />
 
-      <div className="w-3/4 mx-auto my-5 pb-10 bg-blue-500/75 border border-violet-500 text-center text-white lg:w-1/2">
-        <PageTitle title="Template Creation" classNames="text-white" />
+          <div className="w-3/4 mx-auto my-5 pb-10 text-center text-neutral-700 lg:w-1/2">
+            <PageTitle title="Template Creation" />
 
-        <TemplateInputs
-          modifyHeader={modifyHeader}
-          modifyTemplateName={modifyTemplateName}
-          modifyRowData={modifyRowData}
-          rowData={rowData}
-          header={header}
-          templateName={templateName}
-          handleEnterKey={handleEnterKey}
-        />
-        <TemplateButtons
-          handleSubmit={handleSubmit}
-          handleClear={handleClear}
-          sendTable={sendTable}
-          creatingPage={creatingPage}
-        />
-      </div>
+            <TemplateInputs
+              modifyHeader={modifyHeader}
+              modifyTemplateName={modifyTemplateName}
+              modifyRowData={modifyRowData}
+              rowData={rowData}
+              header={header}
+              templateName={templateName}
+              handleEnterKey={handleEnterKey}
+            />
+            <TemplateButtons
+              handleSubmit={handleSubmit}
+              handleClear={handleClear}
+              sendTable={sendTable}
+              creatingPage={creatingPage}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 }
