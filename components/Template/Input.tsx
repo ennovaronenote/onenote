@@ -27,7 +27,7 @@ function TemplateInput(props: TemplateInputProps) {
           type={props.type}
           placeholder={props.placeholder}
           name={props.inputName}
-          onChange={props.modifyHeader || props.modifyTemplateName}
+          onChange={props.modifyInputs}
           onKeyDown={props.handleEnterKey}
           value={props.value}
           autoFocus={shouldFocus}

@@ -13,27 +13,22 @@ import PageTitle from "../PageTitle";
 function TemplateForm(props: any) {
   const { activeCookie, setCookieData, getCookieByKey } =
     useCookies("template");
+  const [inputs, setInputs] = useState<any>({});
   const [header, setHeader] = useState<string>("");
   const [templateName, setTemplateName] = useState<string>("");
   const [creatingPage, setCreatingPage] = useState<boolean>(false);
   const [rowData, setRowData] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
-  // Header acts as an individual header for a column in the table
-  const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
-    const headerInputValue = event.target.value;
-    setHeader(headerInputValue);
-  };
+  const modifyInputs = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
 
-  // Template name will act as a title of the page in OneNote
-  const modifyTemplateName = (event: ChangeEvent<HTMLInputElement>) => {
-    const templateInputValue = event.target.value;
-    setTemplateName(templateInputValue);
-  };
-
-  const modifyRowData = (event: ChangeEvent<HTMLInputElement>) => {
-    const rowInputValue = event.target.value;
-    setRowData(rowInputValue);
+    setInputs((prevInputs: any) => {
+      return {
+        ...prevInputs,
+        [name]: value,
+      };
+    });
   };
 
   // Resets the input data and sets the cookie that includes the list of headers and rows
@@ -57,9 +52,14 @@ function TemplateForm(props: any) {
   const handleClear = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    setHeader("");
-    setRowData("");
-    setTemplateName("");
+    const getKeys = Object.keys(inputs);
+    const clearedInputs: any = {};
+
+    getKeys.forEach((key: string) => {
+      clearedInputs[key] = "";
+    });
+
+    setInputs(clearedInputs);
     setCookieData({
       tableId: activeCookie.tableId,
       headers: [],
@@ -144,7 +144,12 @@ function TemplateForm(props: any) {
   // If there is a page selected, parse its HTML and set the cookie data accordingly.
   useEffect(() => {
     if (props.selectedPage) {
-      setTemplateName(props.title);
+      setInputs((prevInputs: any) => {
+        return {
+          ...prevInputs,
+          templateName: props.title,
+        };
+      });
 
       const parsed = parseOneNoteResponse(props.selectedPage) || {
         id: "",
@@ -172,23 +177,15 @@ function TemplateForm(props: any) {
         </div>
       ) : (
         <>
-          <TemplatePreviewContainer
-            templateName={templateName}
-            activeCookie={activeCookie}
-          />
-
           <div className="w-3/4 mx-auto my-5 pb-10 text-center text-neutral-700 lg:w-1/2">
             <PageTitle title="Template Creation" />
 
             <TemplateInputs
-              modifyHeader={modifyHeader}
-              modifyTemplateName={modifyTemplateName}
-              modifyRowData={modifyRowData}
-              rowData={rowData}
-              header={header}
-              templateName={templateName}
+              modifyInputs={modifyInputs}
+              inputFields={inputs}
               handleEnterKey={handleEnterKey}
             />
+
             <TemplateButtons
               handleSubmit={handleSubmit}
               handleClear={handleClear}
@@ -196,6 +193,11 @@ function TemplateForm(props: any) {
               creatingPage={creatingPage}
             />
           </div>
+
+          <TemplatePreviewContainer
+            templateName={inputs.templateName}
+            activeCookie={activeCookie}
+          />
         </>
       )}
     </>

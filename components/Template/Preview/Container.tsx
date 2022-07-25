@@ -16,7 +16,12 @@ function TemplatePreviewContainer(props: TemplatePreviewContainerProps) {
       <PageTitle
         title="Preview of Template"
         classNames="pt-5 pb-3"
-        shouldRender={props.templateName !== "" && !props.activeCookie.error}
+        shouldRender={
+          !(
+            typeof props.templateName === "undefined" ||
+            props.templateName === ""
+          ) && !props.activeCookie.error
+        }
       >
         <>{props.templateName && <span> ({props.templateName})</span>}</>
       </PageTitle>
