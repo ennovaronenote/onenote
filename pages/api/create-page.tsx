@@ -120,6 +120,7 @@ export default async function createPage(
       );
       pageId = pageId.substring(0, pageId.indexOf("/"));
 
+      console.log(parseNewPage);
       setCookie(
         "page",
         JSON.stringify({

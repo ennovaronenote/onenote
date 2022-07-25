@@ -51,6 +51,7 @@ export const parseOneNoteRequest = (
 
 type ParsedResponse = {
   id: string;
+  title: string;
   headers: string[];
   rows: string[][];
 };
@@ -58,11 +59,13 @@ type ParsedResponse = {
 export const parseOneNoteResponse = (page: any): ParsedResponse => {
   const defaultReturn = {
     id: "",
+    title: "",
     headers: [],
     rows: [[]],
   };
 
   const parsed = parse(page).removeWhitespace();
+  const title = parsed.querySelector("title")?.innerText || "";
   const tables = parsed.querySelector(`[data-id="trainingTable"]`);
   if (!tables) return defaultReturn;
 
@@ -95,6 +98,7 @@ export const parseOneNoteResponse = (page: any): ParsedResponse => {
     ? defaultReturn
     : {
         id: tableId,
+        title: title,
         headers: newHeaders,
         rows: newRows,
       };

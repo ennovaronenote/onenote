@@ -34,7 +34,6 @@ export default async function createTemplate(
 ) {
   const queryTrainingTable = parsed.querySelector(`[data-id="trainingTable"]`);
   const trainingTable = queryTrainingTable?.outerHTML;
-  const htmlOutput = trainingTable || parsed.outerHTML;
   const fetchOptions: any = {
     method: "POST",
     headers: {
@@ -45,8 +44,8 @@ export default async function createTemplate(
 
   const shouldUpdateTemplate = pageName === templateName;
   const body = shouldUpdateTemplate
-    ? { target: tableId, action: "replace", content: htmlOutput }
-    : { html: htmlOutput };
+    ? { target: tableId, action: "replace", content: trainingTable }
+    : { html: parsed.outerHTML };
 
   fetchOptions["body"] = JSON.stringify(body);
 
