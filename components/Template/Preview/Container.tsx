@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PageTitle from "../../PageTitle";
 import TemplatePreviewTable from "./Table";
 
 export type TemplatePreviewContainerProps = {
@@ -12,10 +13,18 @@ export type TemplatePreviewContainerProps = {
 function TemplatePreviewContainer(props: TemplatePreviewContainerProps) {
   return (
     <div className="container mx-auto text-center">
-      <div className="prose-2xl mx-auto text-neutral-700 pt-5 pb-3">
-        Preview of Template{" "}
-        {props.templateName && <span>({props.templateName})</span>}
-      </div>
+      <PageTitle
+        title="Preview of Template"
+        classNames="pt-5 pb-3"
+        shouldRender={
+          !(
+            typeof props.templateName === "undefined" ||
+            props.templateName === ""
+          ) && !props.activeCookie.error
+        }
+      >
+        <>{props.templateName && <span> ({props.templateName})</span>}</>
+      </PageTitle>
 
       <TemplatePreviewTable activeCookie={props.activeCookie} />
     </div>

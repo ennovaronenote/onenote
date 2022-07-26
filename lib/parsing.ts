@@ -5,7 +5,7 @@ export const parseOneNoteRequest = (
   rows: any[][],
   tableId?: string,
   title?: string
-) => {
+): HTMLElement => {
   const table = document.createElement("table");
   table.setAttribute("data-id", "trainingTable");
   if (tableId) table.setAttribute("id", tableId);
@@ -49,10 +49,25 @@ export const parseOneNoteRequest = (
   return element.documentElement;
 };
 
-export const parseOneNoteResponse = (page: any) => {
+type ParsedResponse = {
+  id: string;
+  title: string;
+  headers: string[];
+  rows: string[][];
+};
+
+export const parseOneNoteResponse = (page: any): ParsedResponse => {
+  const defaultReturn = {
+    id: "",
+    title: "",
+    headers: [],
+    rows: [[]],
+  };
+
   const parsed = parse(page).removeWhitespace();
+  const title = parsed.querySelector("title")?.innerText || "";
   const tables = parsed.querySelector(`[data-id="trainingTable"]`);
-  if (!tables) return;
+  if (!tables) return defaultReturn;
 
   let resHeaders: any = tables.querySelectorAll("span") || [];
   let resRows: any = tables.querySelectorAll("tr") || [];
@@ -75,9 +90,16 @@ export const parseOneNoteResponse = (page: any) => {
     newRows.push(row);
   }
 
-  return {
-    id: tables.getAttribute("id"),
-    headers: newHeaders,
-    rows: newRows,
-  };
+  const emptyHeaders = newHeaders.length === 0;
+  const emptyRows = newRows.length === 0;
+  const tableId: string = tables.getAttribute("id") || "";
+
+  return emptyHeaders || emptyRows
+    ? defaultReturn
+    : {
+        id: tableId,
+        title: title,
+        headers: newHeaders,
+        rows: newRows,
+      };
 };

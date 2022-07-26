@@ -5,6 +5,8 @@ import TemplateInputs from "./Inputs";
 import TemplatePreviewContainer from "./Preview/Container";
 import { updateCurrentTemplate } from "../../lib/retrieveCurrentTemplate";
 import { parseOneNoteRequest, parseOneNoteResponse } from "../../lib/parsing";
+import PageTitle from "../PageTitle";
+import createTemplate from "../../lib/createTemplate";
 
 /**
  * @group Components
@@ -12,38 +14,36 @@ import { parseOneNoteRequest, parseOneNoteResponse } from "../../lib/parsing";
 function TemplateForm(props: any) {
   const { activeCookie, setCookieData, getCookieByKey } =
     useCookies("template");
-  const [header, setHeader] = useState<string>("");
-  const [templateName, setTemplateName] = useState<string>("");
+  const [inputs, setInputs] = useState<any>({
+    header: "",
+    rowData: "",
+    templateName: "",
+  });
   const [creatingPage, setCreatingPage] = useState<boolean>(false);
-  const [rowData, setRowData] = useState<string>("");
+  const [error, setError] = useState<boolean>(false);
 
-  // Header acts as an individual header for a column in the table
-  const modifyHeader = (event: ChangeEvent<HTMLInputElement>) => {
-    const headerInputValue = event.target.value;
-    setHeader(headerInputValue);
-  };
+  const modifyInputs = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
 
-  // Template name will act as a title of the page in OneNote
-  const modifyTemplateName = (event: ChangeEvent<HTMLInputElement>) => {
-    const templateInputValue = event.target.value;
-    setTemplateName(templateInputValue);
-  };
-
-  const modifyRowData = (event: ChangeEvent<HTMLInputElement>) => {
-    const rowInputValue = event.target.value;
-    setRowData(rowInputValue);
+    setInputs((prevInputs: any) => {
+      return {
+        ...prevInputs,
+        [name]: value,
+      };
+    });
   };
 
   // Resets the input data and sets the cookie that includes the list of headers and rows
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (!inputs.header || !inputs.templateName) return;
 
     const { headers = [], rows = [] } = updateCurrentTemplate(
-      header,
-      rowData || undefined
+      inputs.header,
+      inputs.rowData
     );
-    setHeader("");
-    setRowData("");
+
+    handleClear(event, true);
     setCookieData({
       tableId: activeCookie.tableId,
       headers,
@@ -52,11 +52,22 @@ function TemplateForm(props: any) {
   };
 
   // Clears only the header field so the app knows how to title the page
-  const handleClear = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleClear = (
+    event: MouseEvent<HTMLButtonElement>,
+    shouldKeepTemplateName?: boolean
+  ) => {
     event.preventDefault();
 
-    setHeader("");
-    setRowData("");
+    const getKeys = Object.keys(inputs);
+    const clearedInputs: any = {};
+
+    getKeys.forEach((key: string) => {
+      if (key === "templateName" && shouldKeepTemplateName)
+        clearedInputs[key] = inputs[key];
+      else clearedInputs[key] = "";
+    });
+
+    setInputs(clearedInputs);
     setCookieData({
       tableId: activeCookie.tableId,
       headers: [],
@@ -73,76 +84,37 @@ function TemplateForm(props: any) {
   // Performs necessary parsing on the HTML so that the data can successfully be sent to OneNote
   const sendTable = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    setCreatingPage(true);
 
     const { headers = [], rows = [[]], tableId = "" } = activeCookie;
-    const parsed = templateName
-      ? parseOneNoteRequest(headers, rows, tableId, templateName)
+    const parsed: HTMLElement = inputs.templateName
+      ? parseOneNoteRequest(headers, rows, tableId, inputs.templateName)
       : parseOneNoteRequest(headers, rows, tableId);
 
-    const htmlOutput =
-      parsed.querySelector(`[data-id="trainingTable"]`)?.outerHTML ||
-      parsed.outerHTML;
-    const table = parsed.querySelector(`[data-id="trainingTable"]`);
-    const tableID = table?.getAttribute("id") || "";
-    const fetchBody: any = { content: JSON.stringify({}) };
-    const pageCookie = getCookieByKey("page") || {};
+    const pageCookie = getCookieByKey("page");
+    if (!pageCookie) return setCreatingPage(false);
 
-    if (pageCookie.displayName !== templateName) {
-      fetchBody["content"] = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          html: parsed.outerHTML,
-        }),
-      };
-    } else {
-      const createPageBody = {
-        target: tableId,
-        action: "replace",
-        content: htmlOutput,
-      };
-      fetchBody["content"] = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify([createPageBody]),
-      };
-    }
-
-    setCreatingPage(true);
-    const createPage = await fetch(
-      "https://developercaleb.com/api/create-page",
-      fetchBody["content"]
-    );
-    const createPageResponse = await createPage.json();
-    const error = createPageResponse.error;
-
-    if (error) console.log(`Error ${JSON.stringify(error)}`);
-
-    setCookieData({
-      tableId: createPageResponse.id,
-      headers: createPageResponse.headers,
-      rows: createPageResponse.rows,
-    });
-
+    const { displayName = "" } = pageCookie;
+    const { templateName = "" } = inputs;
+    await createTemplate(parsed, displayName, templateName, tableId);
     setCreatingPage(false);
   };
 
   // If there is a page selected, parse its HTML and set the cookie data accordingly.
   useEffect(() => {
     if (props.selectedPage) {
-      setTemplateName(props.title);
+      setInputs((prevInputs: any) => {
+        return {
+          ...prevInputs,
+          templateName: props.title,
+        };
+      });
 
-      const parsed = parseOneNoteResponse(props.selectedPage) || {
-        id: "",
-        headers: [],
-        rows: [],
-      };
+      const parsed = parseOneNoteResponse(props.selectedPage);
+      const emptyHeaders = parsed.headers.length === 0;
+      const emptyRows = parsed.rows.length === 0;
 
-      if (parsed.headers.length !== 0 && parsed.rows.length !== 0) {
+      if (!emptyHeaders && !emptyRows) {
         setCookieData({
           tableId: parsed.id,
           headers: parsed.headers,
@@ -155,30 +127,36 @@ function TemplateForm(props: any) {
   // Actual JSX returned
   return (
     <>
-      <TemplatePreviewContainer
-        templateName={templateName}
-        activeCookie={activeCookie}
-      />
+      {error ? (
+        <div className="text-xl text-center py-5">
+          An unexpected error seemed to occur. Are you sure you entered proper
+          data?
+        </div>
+      ) : (
+        <>
+          <div className="w-3/4 mx-auto my-5 pb-10 text-center text-neutral-700 lg:w-1/2">
+            <PageTitle title="Template Creation" />
 
-      <div className="w-3/4 mx-auto my-5 pb-10 bg-blue-500/75 border border-violet-500 text-center text-white">
-        <div className="prose-2xl text-white py-5">Template Creation</div>
+            <TemplateInputs
+              modifyInputs={modifyInputs}
+              inputFields={inputs}
+              handleEnterKey={handleEnterKey}
+            />
 
-        <TemplateInputs
-          modifyHeader={modifyHeader}
-          modifyTemplateName={modifyTemplateName}
-          modifyRowData={modifyRowData}
-          rowData={rowData}
-          header={header}
-          templateName={templateName}
-          handleEnterKey={handleEnterKey}
-        />
-        <TemplateButtons
-          handleSubmit={handleSubmit}
-          handleClear={handleClear}
-          sendTable={sendTable}
-          creatingPage={creatingPage}
-        />
-      </div>
+            <TemplateButtons
+              handleSubmit={handleSubmit}
+              handleClear={handleClear}
+              sendTable={sendTable}
+              creatingPage={creatingPage}
+            />
+          </div>
+
+          <TemplatePreviewContainer
+            templateName={inputs.templateName}
+            activeCookie={activeCookie}
+          />
+        </>
+      )}
     </>
   );
 }

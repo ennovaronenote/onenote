@@ -27,7 +27,7 @@ export default function ViewStudentPages(props: any) {
     );
 
     const request = await fetch(
-      `https://developercaleb.com/api/get-all-pages?userSelector=${student.userSelector}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/get-all-pages?userSelector=${student.userSelector}`
     );
     const response = await request.json();
 
@@ -36,7 +36,7 @@ export default function ViewStudentPages(props: any) {
         response.pagesUrl.indexOf("onenote")
       );
       const pageContent = await fetch(
-        `https://developercaleb.com/api/get-all-pages?resource=${pageId}&userSelector=${student.userSelector}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get-all-pages?resource=${pageId}&userSelector=${student.userSelector}`
       );
       const pageResponse = await pageContent.json();
 
@@ -56,7 +56,7 @@ export default function ViewStudentPages(props: any) {
       );
 
       const pageContent = await fetch(
-        `https://developercaleb.com/api/get-page-content?resource=${
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get-page-content?resource=${
           getCookie.contentUrl.substring(
             getCookie.contentUrl.indexOf("onenote")
           ) + "?includeIDs=true"
@@ -80,7 +80,7 @@ export default function ViewStudentPages(props: any) {
       const student = props.students[0];
 
       const request = await fetch(
-        `https://developercaleb.com/api/get-all-pages?userSelector=${student.userSelector}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/get-all-pages?userSelector=${student.userSelector}`
       );
       const response = await request.json();
 
@@ -89,7 +89,7 @@ export default function ViewStudentPages(props: any) {
           response.pagesUrl.indexOf("onenote")
         );
         const pageContent = await fetch(
-          `https://developercaleb.com/api/get-all-pages?resource=${pageId}&userSelector=${student.userSelector}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/get-all-pages?resource=${pageId}&userSelector=${student.userSelector}`
         );
         const pageResponse = await pageContent.json();
 

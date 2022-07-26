@@ -48,6 +48,7 @@ class GraphRequest {
         res,
         maxAge: 0,
         sameSite: "lax",
+        httpOnly: true,
       };
       const tokenExists = hasCookie("token", cookieOptions);
 

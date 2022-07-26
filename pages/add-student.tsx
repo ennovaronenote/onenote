@@ -36,6 +36,16 @@ export async function getServerSideProps(context: NextPageContext) {
     props: {},
   };
 
+  if (templates.error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/view-sections",
+      },
+      props: {},
+    };
+  }
+
   const client = AuthenticationClient.init(AUTH_CONFIG);
   const clientApi = await client.api({ context, userSelector: "/users" });
   const response = await clientApi.executeRequest({ shouldReturnProps: false });
@@ -46,6 +56,14 @@ export async function getServerSideProps(context: NextPageContext) {
       error: response.error,
       students: [],
       templates: [],
+    };
+
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/view-pages",
+      },
+      props: {},
     };
   }
 
