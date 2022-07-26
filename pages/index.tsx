@@ -20,8 +20,9 @@ const Home: NextPage = () => {
 export async function getServerSideProps(context: NextPageContext) {
   const client = AuthenticationClient.init(AUTH_CONFIG);
   const request = await client.api({ context });
+  const response = await request.executeRequest({});
 
-  request.executeRequest({});
+  console.log(response);
   return { props: {} };
 }
 
